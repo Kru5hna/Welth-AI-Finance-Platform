@@ -1,9 +1,15 @@
 import React from 'react'
 
-const DashBoard = () => {
+function DashBoardPage() {
   return (
-    <div>DashBoard Page</div>
+    <div>
+      {/* Budget progress */}
+
+      {/* Overview */}
+
+      {/* Accounts Grid  */}
+    </div>
   )
 }
 
-export default DashBoard
+export default DashBoardPage
