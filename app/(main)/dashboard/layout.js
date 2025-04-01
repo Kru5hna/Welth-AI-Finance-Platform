@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react'
 import DashBoardPage from './page'
+import { BarLoader } from 'react-spinners'
 
 const DashboardLayout = () => {
   return (
