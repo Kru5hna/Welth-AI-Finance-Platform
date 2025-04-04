@@ -49,10 +49,13 @@ const CreateAccountDrawer = ({ children }) => {
   const {
     data:newAccount ,
     error,
-    fn: creatAccountFn,
-    loading:createAccountLoading
+    fn: createAccountFn,
+    loading: createAccountLoading
   }  = useFetch(createAccount);
 
+  const handleCreateAccount = async () => {
+    await createAccountFn();
+  }
 
   useEffect( () => {
     if(newAccount && !createAccountLoading) {
@@ -155,7 +158,12 @@ const CreateAccountDrawer = ({ children }) => {
                </Button>
             </DrawerClose>
               {/* Submit Button */}
-              <Button type="submit" className="flex-1 cursor-pointer" disabled = {createAccountLoading}>
+              <Button
+               type="submit"
+               className="flex-1 cursor-pointer"
+               disabled = {createAccountLoading}
+               onClick = {handleCreateAccount}
+               >
                {createAccountLoading ? 
                (<><Loader2 className="mr-2 h-4 w-4 animate-spin "/> Creating...</>) 
                :
