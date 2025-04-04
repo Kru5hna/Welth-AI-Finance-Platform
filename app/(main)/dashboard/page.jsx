@@ -2,8 +2,13 @@ import React from 'react'
 import CreateAccountDrawer from '@/components/create-account-drawer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Plus } from 'lucide-react'
+import { getUserAccounts } from '@/actions/dashboard'
 
-function DashBoardPage() {
+async function DashBoardPage() {
+
+  const accounts = await getUserAccounts();
+  console.log(accounts)
+
   return (
     <div>
       {/* Budget progress */}
@@ -21,6 +26,10 @@ function DashBoardPage() {
     </CardContent>
   </Card>
 </CreateAccountDrawer>
+
+{accounts.length > 0 && accounts?.map((account) => {
+  return account.name;
+})}
 
 
     </div>

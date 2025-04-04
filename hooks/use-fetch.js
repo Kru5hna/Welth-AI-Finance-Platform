@@ -2,7 +2,7 @@ const { useState } = require("react")
 
 const useFetch = (cb) => {
    const [data, setData] = useState(undefined);
-   const [loading, setLoading] = useState(null);
+   const [loading, setLoading] = useState(false);
    const [error, setError] = useState(null);
 
    const fn = async (...args) => {
@@ -26,4 +26,4 @@ const useFetch = (cb) => {
 
 }
 
-export default useFetch();
+export default useFetch;
