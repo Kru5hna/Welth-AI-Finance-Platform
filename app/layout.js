@@ -2,6 +2,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "sonner";
 
 
 
@@ -25,6 +26,7 @@ export default function RootLayout({ children }) {
 
         {children}
         </main>
+        <Toaster richColors/>
 
         {/* footer */}
       <footer className="text-gray-600 bg-blue-100 p-12 text-center">

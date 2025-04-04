@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import {
   Drawer,
+  DrawerClose,
   DrawerContent,
   DrawerHeader,
   DrawerTitle,
@@ -19,6 +20,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { Switch } from "./ui/switch";
+import { Button } from "./ui/button";
 
 const CreateAccountDrawer = ({ children }) => {
   const [open, setOpen] = useState(false);
@@ -41,10 +43,10 @@ const CreateAccountDrawer = ({ children }) => {
   });
 
   // Handle form submission
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log("Submitted Data:", data);
-    setOpen(false);
-    reset(); // Reset form after submission
+   //  setOpen(false);
+   //  reset(); // Reset form after submission
   };
 
   return (
@@ -70,6 +72,22 @@ const CreateAccountDrawer = ({ children }) => {
                 <p className="text-sm text-red-500">{errors.name.message}</p>
               )}
             </div>
+               {/* Account Type Selection */}
+               <div className="space-y-2">
+              <label className="text-sm font-medium">Account Type</label>
+              <Select
+                defaultValue={watch("type")}
+                onValueChange={(value) => setValue("type", value)}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Select Account Type" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="CURRENT">Current</SelectItem>
+                  <SelectItem value="SAVING">Savings</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
 
             <div className="space-y-2">
               <label htmlFor="balance" className="text-sm font-medium">
@@ -87,45 +105,36 @@ const CreateAccountDrawer = ({ children }) => {
               )}
             </div>
 
-            <div className="space-y-2">
-              <label htmlFor="isDefault" className="text-sm font-medium">
+            <div className="flex items-center justify-between rounded-lg border p-3">
+              <div className="space-y-0.5">
+              <label htmlFor="isDefault" className="text-sm font-medium cursor-pointer">
                 Set As Default
               </label>
-             <p>
+             <p className="text-sm text-muted-foreground ">
              This account will be selected by default for transactions
              </p>
+              </div>
              <Switch 
              id = "isDefault"
              checked={watch("isDefault")}
-             checkedChange={(checked) => setValue("isDefault", checked)}
+             onCheckedChange={(checked) => setValue("isDefault", checked)}
 
              />
             </div>
 
-            {/* Account Type Selection */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Account Type</label>
-              <Select
-                defaultValue={watch("type")}
-                onValueChange={(value) => setValue("type", value)}
-              >
-                <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select Account Type" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="CURRENT">Current</SelectItem>
-                  <SelectItem value="SAVING">Savings</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+         <div className="flex gap-4 pt-4">
+            <DrawerClose asChild>
+               <Button type="button" variant="outline" className="flex-1">
+                  Cancel
+               </Button>
+            </DrawerClose>
+              {/* Submit Button */}
+              <Button type="submit" className="flex-1">
+               Create Account
+              </Button>
+         </div>
 
-            {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition"
-            >
-              Create Account
-            </button>
+          
           </form>
         </div>
       </DrawerContent>
