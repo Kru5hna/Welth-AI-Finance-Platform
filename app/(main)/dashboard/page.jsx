@@ -1,9 +1,9 @@
 import React from 'react'
-import CreateAccountDrawer from '@/components/create-account-drawer'
 import { Card, CardContent } from '@/components/ui/card'
 import { Plus } from 'lucide-react'
 import { getUserAccounts } from '@/actions/dashboard'
 import AccountCard from './_components/account-card'
+import { CreateAccountDrawer } from '@/components/create-account-drawer'
 
 async function DashBoardPage() {
 
