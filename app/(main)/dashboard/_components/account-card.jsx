@@ -1,6 +1,7 @@
 "use client";
 
-import updateDefaultAccount from "@/actions/account";
+
+import { updateDefaultAccount } from "@/actions/account";
 import {
   Card,
   CardContent,
@@ -27,22 +28,33 @@ const AccountCard = ({ account }) => {
   } = useFetch(updateDefaultAccount);
 
   const handleDefaultChange = async (event) => {
-    event.preventDefault(); // Prevent navigation
-
+    event.preventDefault();
+  
     if (isDefault) {
-
       toast.warning("You need atleast 1 default account");
-      return; // Don't allow toggling off the default account
+      return;
     }
-
-    await updateDefaultFn(id);
-
+  
+    const res = await updateDefaultFn(id); // <- log here
+    console.log("response from updateDefaultFn:", res);
   };
-useEffect(() => {
-  if (updatedAccount?.success) {
+  
+  useEffect(() => {
+    console.log("chal n bhai1", updatedAccount); // <- print the value
+    if (updatedAccount?.success) {
+      console.log("chal n bhai2");
       toast.success("Default Account Updated Successfully");
+    }
+  }, [updatedAccount]);
+
+useEffect(() => {
+  console.log("chal n bhai3")
+  if( error ) {
+  console.log("chal n bhai4")
+
+    toast.error(error.message || "Failed to update Default Account")
   }
-}, [updatedAccount]);
+},[error])
 
 
   return (
