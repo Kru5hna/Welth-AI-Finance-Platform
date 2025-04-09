@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -19,9 +19,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ChevronDown, ChevronUp, Clock, MoreHorizontal, RefreshCw } from "lucide-react";
+import { ChevronDown, ChevronUp, Clock, MoreHorizontal, RefreshCw, Search, Trash, X } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/router";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const RECURRING_INTERVALS = {
   DAILY: "Daily",
@@ -32,14 +35,35 @@ const RECURRING_INTERVALS = {
 
 
 const TransactionTable = ({ transactions }) => {
-  const filteredAndSortedTransactions = transactions;
 
   const router = useRouter();
   const [selectedIds, setSelectedIds] = useState([])
   const [sortConfig, setSortConfig] = useState({
     field: "date",
     direction: "desc"
-})
+});
+
+  const [searchTerm, setSearchTerm] = useState("")
+  const [typeFilter, setTypeFilter] = useState("")
+  const [recurringFilter, setRecurringFilter] = useState("")
+
+  const filteredAndSortedTransactions = useMemo( () => {
+    let result = [...transactions];
+    // Search Filter lavat ahe
+
+    if(searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
+      result = result.filter((transactions) => 
+      transactions.description?.toLowerCase().includes(searchLower) );
+    }
+    // Apply recurring filter
+
+    if(recurringFilter) {
+      
+    }
+
+  });
+
 
   const handleSort = (field) => {
     setSortConfig(current => ({
@@ -65,9 +89,58 @@ const TransactionTable = ({ transactions }) => {
     );
   };
 
+  const handleBulkDelete = () => {
+
+  }
+  const handleClearFilters = () => {
+      setSearchTerm("")
+      setRecurringFilter("");
+      setTypeFilter("");
+      setSelectedIds([]);
+  }
+
   return (
     <div className="space-y-4">
       {/* Filters  */}
+
+        <div className="flex flex-col sm:flex-row gap-4">
+          <div className="relative flex-1">
+      <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+      <Input 
+      placeholder= "Search Transactions..."
+      value= {searchTerm}
+      onChange = {(e) => setSearchTerm(e.target.value)}
+      className="pl-8"
+              />
+          </div>
+
+         <div>
+         <Select value={RecurringFilter} onValueChange={(value) => setRecurringFilter(value)} >
+  <SelectTrigger className="w-[150px]">
+    <SelectValue placeholder="All Transactions" />
+  </SelectTrigger>
+  <SelectContent>
+    <SelectItem value="recurring">Recurring only</SelectItem>
+    <SelectItem value="non-recurring">Non-recurring only</SelectItem>
+  </SelectContent>
+</Select>
+
+      {selectedIds.length > 0 && (
+        <div className="flex items-center gap-2">
+          <Button variant="destructive" size= "sm" onClick={handleBulkDelete} >
+            <Trash className="h-4 w-4 mr-2" />
+            Delete Selected ({selectedIds.length})
+          </Button>
+          </div>
+      )}
+
+      ((searchTerm || typeFilter || recurringFilter) && (
+        <Button variant="outline" size="icon" onClick={handleClearFilters} title="Clear Filters"> <X className="h-4 w-5" /> </Button>
+      ))
+
+         </div>
+
+        </div>
 
       {/* Transactions  */}
 
