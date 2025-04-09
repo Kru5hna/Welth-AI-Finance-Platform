@@ -1,6 +1,5 @@
 "use client";
-
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Table,
   TableBody,
@@ -20,11 +19,15 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { ChevronDown, ChevronUp, Clock, MoreHorizontal, RefreshCw, Search, Trash, X } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/router";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import useFetch from "@/hooks/use-fetch";
+import { bulkDeleteTransactions } from "@/actions/account";
+import { toast } from "sonner";
+import { BarLoader } from "react-spinners";
 
 const RECURRING_INTERVALS = {
   DAILY: "Daily",
@@ -47,22 +50,61 @@ const TransactionTable = ({ transactions }) => {
   const [typeFilter, setTypeFilter] = useState("")
   const [recurringFilter, setRecurringFilter] = useState("")
 
+  const {
+    loading: deleteLoading,
+    fn: deleteFn,
+    data: deleted,
+  } = useFetch(bulkDeleteTransactions);
+
   const filteredAndSortedTransactions = useMemo( () => {
     let result = [...transactions];
     // Search Filter lavat ahe
 
     if(searchTerm) {
       const searchLower = searchTerm.toLowerCase();
-      result = result.filter((transactions) => 
-      transactions.description?.toLowerCase().includes(searchLower) );
+      result = result.filter((transaction) => 
+      transaction.description?.toLowerCase().includes(searchLower) );
     }
     // Apply recurring filter
 
     if(recurringFilter) {
-      
+      result = result.filter((transaction) => {
+        if(recurringFilter === "recurring") return transaction.isRecurring;
+        return !transaction.isRecurring
+      })
     }
 
-  });
+    // Apply type filter
+    if(typeFilter) {
+      result = result.filter((transaction) => transaction.type === typeFilter)
+    }
+
+    // Apply Sort
+
+    result.sort((a,b) => {
+      let comparison = 0;
+
+      switch(sortConfig.field) {
+        case "date":
+          comparison = new Date(a) - new Date(b);
+          break;
+
+        case "amount" :
+          comparison = a.amount - b.amount;
+          break;
+
+        case "category":
+          comparison = a.category.loaclCompare(b.category);
+
+        default:
+          comparison = 0;
+      }
+      return sortConfig.direction === "asc" ? comparison : -comparison;
+    })
+
+    return result;
+    
+  }, [transactions, searchTerm,typeFilter,recurringFilter,sortConfig] );
 
 
   const handleSort = (field) => {
@@ -89,9 +131,22 @@ const TransactionTable = ({ transactions }) => {
     );
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
+      if(
+        !window.confirm (
+          `Are you sure you want to delete ${selectedIds.length} transactions?`
+        ) 
+      ){
+        return;
+      }
+      deleteFn(selectedIds)
+  };
 
-  }
+  useEffect(() => {
+    if(deleted && !deleteLoading) {
+      toast.error("Transactions deleted Successfully");
+    }
+  },[deleted,deleteLoading])
   const handleClearFilters = () => {
       setSearchTerm("")
       setRecurringFilter("");
@@ -102,6 +157,8 @@ const TransactionTable = ({ transactions }) => {
   return (
     <div className="space-y-4">
       {/* Filters  */}
+
+      { deleteLoading && <BarLoader className="mt-4" width={"100%"} color="#9333ea" />}
 
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="relative flex-1">
@@ -287,18 +344,18 @@ const TransactionTable = ({ transactions }) => {
     </Button>
   </DropdownMenuTrigger>
   <DropdownMenuContent>
-    <DropdownMenuLabel
+    <DropdownMenuItem
       onClick = {() => {
         router.push(
           `transaction/create?edit = ${transactions.id}`
         )
       }}
 
-    >Edit</DropdownMenuLabel>
+    >Edit</DropdownMenuItem>
     <DropdownMenuSeparator />
     <DropdownMenuItem
     className="text-destructive"
-    // onClick= {() => deleteFn(transactions.id)}
+    onClick= {() => deleteFn(transactions.id)}
     >Delete</DropdownMenuItem>
     
   </DropdownMenuContent>
