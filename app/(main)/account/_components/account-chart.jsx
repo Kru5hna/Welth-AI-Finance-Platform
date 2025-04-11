@@ -1,88 +1,165 @@
-"use client"
+"use client";
 
-import { endOfDay, startOfDay, subDays } from 'date-fns'
-import React, { useMemo } from 'react'
-import { Bar, CartesianGrid, Legend, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis, BarChart } from 'recharts'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { endOfDay, startOfDay, subDays, format } from "date-fns";
+import React, { useMemo, useState } from "react";
+import {
+  Bar,
+  CartesianGrid,
+  Legend,
+  Rectangle,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+  BarChart,
+} from "recharts";
 
+const DATE_RANGES = {
+  "7D": { label: "Last 7 Days", days: 7 },
+  "1M": { label: "Last Month", days: 30 },
+  "3M": { label: "Last 3 Months", days: 90 },
+  "6M": { label: "Last 6 Months", days: 180 },
+  ALL: { label: "All Time", days: null },
+};
 
-const DATE_RANGES ={
-  "7D": {label: "Last 7 Days", days:7},
-  "1M": {label: "Last Month", days:30},
-  "3M": {label: "Last 3 Months", days:90},
-  "6M": {label: "Last 6 Months", days:180},
-  ALL : {label: "All Time", days:null},
-}
-
-const AccountChart = () => {
-
+export function AccountChart({ transactions }) {
   const [dateRange, setDateRange] = useState("1M");
 
   const filteredData = useMemo(() => {
     const range = DATE_RANGES[dateRange];
     const now = new Date();
-    const startDate = range.days ? startOfDay(subDays(now,range.days))
-                                 : startOfDay(new Date(0));
+    const startDate = range.days
+      ? startOfDay(subDays(now, range.days))
+      : startOfDay(new Date(0));
 
-    // Filter the transactions within date Range
-  const filtered = transactions.filter(
-    (t) => new Date(t.date) >= startDate && new Date(t.date) <= endOfDay(now)
-  );
+    // Filter transactions within date range
+    const filtered = transactions.filter(
+      (t) => new Date(t.date) >= startDate && new Date(t.date) <= endOfDay(now)
+    );
 
-  const grouped = filtered.reduce((acc,transaction) => {
-    const date = format(new Date(transaction.date), "MMM dd");
+    // Group transactions by date
+    const grouped = filtered.reduce((acc, transaction) => {
+      const date = format(new Date(transaction.date), "MMM dd");
+      if (!acc[date]) {
+        acc[date] = { date, income: 0, expense: 0 };
+      }
+      if (transaction.type === "INCOME") {
+        acc[date].income += transaction.amount;
+      } else {
+        acc[date].expense += transaction.amount;
+      }
+      return acc;
+    }, {});
 
-    if(!acc[date]) {
-      acc[date] = { date, income: 0, expense: 0}
-    }
-
-    if(transaction.type === "INCOME") {
-      acc[date].income += transaction.amount;
-
-    }else {
-      acc[date].expense += transaction.amount;
-    }
-    return acc;
-
-  },{});
-
-  // Convert to array and sort by date
-  return Object.values(grouped).sort(
-    (a,b) => new Date(a.date) - new Date(b.date)
-  )
-
+    // Convert to array and sort by date
+    return Object.values(grouped).sort(
+      (a, b) => new Date(a.date) - new Date(b.date)
+    );
   }, [transactions, dateRange]);
 
- console.log(filteredData)
-
+  // Calculate totals for the selected period
+  const totals = useMemo(() => {
+    return filteredData.reduce(
+      (acc, day) => ({
+        income: acc.income + day.income,
+        expense: acc.expense + day.expense,
+      }),
+      { income: 0, expense: 0 }
+    );
+  }, [filteredData]);
 
   return (
-    <div>
-      <h1>sdlkfjaldsfjlasjflkajldfkjakdsfkadsfjadkfjlajkflka</h1>
-      
-      {/* <ResponsiveContainer width="100%" height="100%">
-        <BarChart
-          width={500}
-          height={300}
-          data={data}
-          margin={{
-            top: 5,
-            right: 30,
-            left: 20,
-            bottom: 5,
-          }}
-        >
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="pv" fill="#8884d8" activeBar={<Rectangle fill="pink" stroke="blue" />} />
-          <Bar dataKey="uv" fill="#82ca9d" activeBar={<Rectangle fill="gold" stroke="purple" />} />
-        </BarChart>
-      </ResponsiveContainer> */}
-
+    <div style={{ width: "100%", height: 400 }}>
+      <Card>
+        <CardHeader>
+          <CardTitle>Transaction Chart</CardTitle>
+          <Select>
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="Theme" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(DATE_RANGES).map(([key, { label }]) => {
+                return (
+                  <SelectItem key={key} value={key}>
+                    {label}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </CardHeader>
+        <CardContent>
+          <div className="flex justify-around mb-6 text-sm">
+            <div className="text-center">
+              <p className="text-muted-foreground">Total Income</p>
+              <p className="text-lg font-bold text-green-500">
+                ${totals.income.toFixed(2)}
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="text-muted-foreground">Total Expenses</p>
+              <p className="text-lg font-bold text-red-500">
+                ${totals.income.toFixed(2)}
+              </p>
+            </div>
+            <div className="text-center">
+              <p className="text-muted-foreground">Net</p>
+              <p
+                className={`text-lg font-bold ${
+                  totals.income - totals.expense >= 0
+                    ? "text-green-500"
+                    : "text-red-500"
+                }`}
+              >
+                ${(totals.income - totals.expense).toFixed(2)}
+              </p>
+            </div>
+          </div>
+            
+          <div>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart
+              data={filteredData}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar
+                dataKey="income"
+                fill="#8884d8"
+                activeBar={<Rectangle fill="pink" stroke="blue" />}
+              />
+              <Bar
+                dataKey="expense"
+                fill="#82ca9d"
+                activeBar={<Rectangle fill="gold" stroke="purple" />}
+              />
+            </BarChart>
+          </ResponsiveContainer>
+          </div>
+        </CardContent>
+      </Card>
     </div>
-  )
+  );
 }
-
-export default AccountChart

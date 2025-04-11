@@ -36,7 +36,6 @@ const AccountCard = ({ account }) => {
     }
   
     const res = await updateDefaultFn(id); // <- log here
-    console.log("response from updateDefaultFn:", res);
   };
   
   useEffect(() => {
