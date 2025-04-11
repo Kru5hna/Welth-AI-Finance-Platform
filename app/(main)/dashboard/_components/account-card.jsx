@@ -40,17 +40,13 @@ const AccountCard = ({ account }) => {
   };
   
   useEffect(() => {
-    console.log("chal n bhai1", updatedAccount); // <- print the value
     if (updatedAccount?.success) {
-      console.log("chal n bhai2");
       toast.success("Default Account Updated Successfully");
     }
   }, [updatedAccount]);
 
 useEffect(() => {
-  console.log("chal n bhai3")
   if( error ) {
-  console.log("chal n bhai4")
 
     toast.error(error.message || "Failed to update Default Account")
   }
