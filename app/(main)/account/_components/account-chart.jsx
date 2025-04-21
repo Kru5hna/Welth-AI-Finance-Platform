@@ -81,6 +81,8 @@ export function AccountChart({ transactions }) {
     );
   }, [filteredData]);
 
+  console.log(filteredData)
+
   return (
     <div style={{ width: "100%", height: 400 }}>
       <Card>
@@ -112,7 +114,7 @@ export function AccountChart({ transactions }) {
             <div className="text-center">
               <p className="text-muted-foreground">Total Expenses</p>
               <p className="text-lg font-bold text-red-500">
-                ${totals.income.toFixed(2)}
+                ${totals.expense.toFixed(2)}
               </p>
             </div>
             <div className="text-center">
@@ -128,8 +130,9 @@ export function AccountChart({ transactions }) {
               </p>
             </div>
           </div>
-            
+             {/* till this its rendering but the chart nope*/}
           <div>
+            <h1></h1>
           <ResponsiveContainer width="100%" height="100%">
             <BarChart
               data={filteredData}
