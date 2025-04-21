@@ -24,12 +24,24 @@ export async function createAccount(data) {
       const {userId} = await auth();
       if(!userId) throw new Error("Unauthorized");
 
-      const user = await db.user.findUnique({
+      let user = await db.user.findUnique({
          where: {clerkUserId: userId},
       })
 
       if(!user) {
          throw new Error("User Not found")
+
+          // Optional: fetch user details from Clerk
+//   const clerkUser = await clerkClient.users.getUser(userId);
+
+//   // Create the user in your database
+//   user = await db.user.create({
+//     data: {
+//       clerkUserId: userId,
+//       email: clerkUser.emailAddresses[0].emailAddress, // or whatever you want to store
+//     },
+//   });
+
       }
 
       // Convert balance to float before saving

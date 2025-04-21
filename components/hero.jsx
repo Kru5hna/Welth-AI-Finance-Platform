@@ -43,13 +43,13 @@ const HeroSection = () => {
          An AI-powered financial management platform that helps you track, analyze, and optimize your spending with real-time insights.
          </p>
 
-         <div>
+         <div className="">
             <Link href='/dashboard'>
             {/* <Button size="lg" className="px-8">
                Get Started
             </Button> */}
 
-<button className="p-[3px] relative">
+<button className="p-[3px] relative mr-5 mt-5">
   <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg" />
   <div className="px-8 py-2  bg-black rounded-[6px]  relative group transition duration-200 text-white hover:bg-transparent cursor-pointer">
     Get Started
@@ -59,12 +59,13 @@ const HeroSection = () => {
 </Link>
 {/* // Button code */}
         <Link href="https://www.youtube.com/watch?v=egS6fnZAdzk&">
-        <button className="inline-flex h-10 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-slate-400 transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 cursor-pointer">
+        <button className="inline-flex h-10 animate-shimmer items-center justify-center rounded-md border border-slate-800 bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] px-6 font-medium text-white transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 cursor-pointer gap-4">
           Watch Demo
         </button>
   
         </Link>
       
+
          </div>
 
          <div className="hero-image-wrapper">

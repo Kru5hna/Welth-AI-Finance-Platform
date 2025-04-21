@@ -75,17 +75,17 @@ export function CreateAccountDrawer({ children }) {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>Create New Account</DrawerTitle>
+      <DrawerContent className="space-y-4">
+        <DrawerHeader className="border-b pb-2">
+          <DrawerTitle className="text-lg font-semibold">Create New Account</DrawerTitle>
         </DrawerHeader>
-        <div className="px-4 pb-4">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+  
+        <div className="px-4 pb-6 overflow-y-auto">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+  
+            {/* Account Name */}
             <div className="space-y-2">
-              <label
-                htmlFor="name"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
+              <label htmlFor="name" className="text-sm font-medium text-foreground">
                 Account Name
               </label>
               <Input
@@ -94,15 +94,13 @@ export function CreateAccountDrawer({ children }) {
                 {...register("name")}
               />
               {errors.name && (
-                <p className="text-sm text-red-500">{errors.name.message}</p>
+                <p className="text-xs text-red-500">{errors.name.message}</p>
               )}
             </div>
-
+  
+            {/* Account Type */}
             <div className="space-y-2">
-              <label
-                htmlFor="type"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
+              <label htmlFor="type" className="text-sm font-medium text-foreground">
                 Account Type
               </label>
               <Select
@@ -110,7 +108,7 @@ export function CreateAccountDrawer({ children }) {
                 defaultValue={watch("type")}
               >
                 <SelectTrigger id="type">
-                  <SelectValue placeholder="Select type" />
+                  <SelectValue placeholder="Select account type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="CURRENT">Current</SelectItem>
@@ -118,15 +116,13 @@ export function CreateAccountDrawer({ children }) {
                 </SelectContent>
               </Select>
               {errors.type && (
-                <p className="text-sm text-red-500">{errors.type.message}</p>
+                <p className="text-xs text-red-500">{errors.type.message}</p>
               )}
             </div>
-
+  
+            {/* Initial Balance */}
             <div className="space-y-2">
-              <label
-                htmlFor="balance"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
+              <label htmlFor="balance" className="text-sm font-medium text-foreground">
                 Initial Balance
               </label>
               <Input
@@ -137,20 +133,18 @@ export function CreateAccountDrawer({ children }) {
                 {...register("balance")}
               />
               {errors.balance && (
-                <p className="text-sm text-red-500">{errors.balance.message}</p>
+                <p className="text-xs text-red-500">{errors.balance.message}</p>
               )}
             </div>
-
-            <div className="flex items-center justify-between rounded-lg border p-3">
-              <div className="space-y-0.5">
-                <label
-                  htmlFor="isDefault"
-                  className="text-base font-medium cursor-pointer"
-                >
+  
+            {/* Default Account Toggle */}
+            <div className="flex items-center justify-between rounded-xl border p-4 bg-muted">
+              <div className="space-y-1">
+                <label htmlFor="isDefault" className="text-sm font-medium">
                   Set as Default
                 </label>
-                <p className="text-sm text-muted-foreground">
-                  This account will be selected by default for transactions
+                <p className="text-xs text-muted-foreground">
+                  This will be the default account for new transactions.
                 </p>
               </div>
               <Switch
@@ -159,10 +153,15 @@ export function CreateAccountDrawer({ children }) {
                 onCheckedChange={(checked) => setValue("isDefault", checked)}
               />
             </div>
-
-            <div className="flex gap-4 pt-4">
+  
+            {/* Action Buttons */}
+            <div className="flex gap-3 pt-4">
               <DrawerClose asChild>
-                <Button type="button" variant="outline" className="flex-1">
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="flex-1 border-muted-foreground"
+                >
                   Cancel
                 </Button>
               </DrawerClose>
@@ -181,9 +180,11 @@ export function CreateAccountDrawer({ children }) {
                 )}
               </Button>
             </div>
+  
           </form>
         </div>
       </DrawerContent>
     </Drawer>
   );
+  
 }

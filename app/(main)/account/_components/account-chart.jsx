@@ -19,7 +19,6 @@ import {
   Bar,
   CartesianGrid,
   Legend,
-  Rectangle,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -45,12 +44,10 @@ export function AccountChart({ transactions }) {
       ? startOfDay(subDays(now, range.days))
       : startOfDay(new Date(0));
 
-    // Filter transactions within date range
     const filtered = transactions.filter(
       (t) => new Date(t.date) >= startDate && new Date(t.date) <= endOfDay(now)
     );
 
-    // Group transactions by date
     const grouped = filtered.reduce((acc, transaction) => {
       const date = format(new Date(transaction.date), "MMM dd");
       if (!acc[date]) {
@@ -64,13 +61,11 @@ export function AccountChart({ transactions }) {
       return acc;
     }, {});
 
-    // Convert to array and sort by date
     return Object.values(grouped).sort(
       (a, b) => new Date(a.date) - new Date(b.date)
     );
   }, [transactions, dateRange]);
 
-  // Calculate totals for the selected period
   const totals = useMemo(() => {
     return filteredData.reduce(
       (acc, day) => ({
@@ -81,48 +76,47 @@ export function AccountChart({ transactions }) {
     );
   }, [filteredData]);
 
-  console.log(filteredData)
-
   return (
-    <div style={{ width: "100%", height: 400 }}>
-      <Card>
-        <CardHeader>
-          <CardTitle>Transaction Chart</CardTitle>
-          <Select>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="Theme" />
+    <div className="w-full max-w-5xl mx-auto p-6">
+      <Card className="bg-gradient-to-br from-white to-zinc-100 shadow-md rounded-xl">
+        <CardHeader className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <CardTitle className="text-2xl font-semibold text-zinc-800">
+            📊 Transaction Summary
+          </CardTitle>
+          <Select onValueChange={setDateRange} value={dateRange}>
+            <SelectTrigger className="w-[200px] border border-zinc-300 shadow-sm rounded-md">
+              <SelectValue placeholder="Select Range" />
             </SelectTrigger>
             <SelectContent>
-              {Object.entries(DATE_RANGES).map(([key, { label }]) => {
-                return (
-                  <SelectItem key={key} value={key}>
-                    {label}
-                  </SelectItem>
-                );
-              })}
+              {Object.entries(DATE_RANGES).map(([key, { label }]) => (
+                <SelectItem key={key} value={key}>
+                  {label}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </CardHeader>
+
         <CardContent>
-          <div className="flex justify-around mb-6 text-sm">
-            <div className="text-center">
-              <p className="text-muted-foreground">Total Income</p>
-              <p className="text-lg font-bold text-green-500">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center">
+            <div className="bg-green-50 p-4 rounded-lg shadow-sm">
+              <p className="text-sm text-zinc-500">Total Income</p>
+              <p className="text-xl font-bold text-green-600">
                 ${totals.income.toFixed(2)}
               </p>
             </div>
-            <div className="text-center">
-              <p className="text-muted-foreground">Total Expenses</p>
-              <p className="text-lg font-bold text-red-500">
+            <div className="bg-red-50 p-4 rounded-lg shadow-sm">
+              <p className="text-sm text-zinc-500">Total Expenses</p>
+              <p className="text-xl font-bold text-red-500">
                 ${totals.expense.toFixed(2)}
               </p>
             </div>
-            <div className="text-center">
-              <p className="text-muted-foreground">Net</p>
+            <div className="bg-blue-50 p-4 rounded-lg shadow-sm">
+              <p className="text-sm text-zinc-500">Net</p>
               <p
-                className={`text-lg font-bold ${
+                className={`text-xl font-bold ${
                   totals.income - totals.expense >= 0
-                    ? "text-green-500"
+                    ? "text-green-600"
                     : "text-red-500"
                 }`}
               >
@@ -130,36 +124,37 @@ export function AccountChart({ transactions }) {
               </p>
             </div>
           </div>
-             {/* till this its rendering but the chart nope*/}
-          <div>
-            <h1></h1>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={filteredData}
-              margin={{
-                top: 5,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="date" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar
-                dataKey="income"
-                fill="#8884d8"
-                activeBar={<Rectangle fill="pink" stroke="blue" />}
-              />
-              <Bar
-                dataKey="expense"
-                fill="#82ca9d"
-                activeBar={<Rectangle fill="gold" stroke="purple" />}
-              />
-            </BarChart>
-          </ResponsiveContainer>
+
+          <div className="h-[350px] bg-white rounded-lg shadow-inner p-4">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={filteredData}
+                margin={{ top: 10, right: 30, left: 0, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="date" fontSize={12} />
+                <YAxis
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `$${value}`}
+                />
+                <Tooltip formatter={(value) => [`$${value}`, undefined]} />
+                <Legend />
+                <Bar
+                  dataKey="income"
+                  name="Income"
+                  fill="#4ade80"
+                  radius={[4, 4, 0, 0]}
+                />
+                <Bar
+                  dataKey="expense"
+                  name="Expense"
+                  fill="#f87171"
+                  radius={[4, 4, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
           </div>
         </CardContent>
       </Card>

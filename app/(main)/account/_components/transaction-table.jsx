@@ -12,6 +12,8 @@ import {
   ChevronRight,
   RefreshCw,
   Clock,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
@@ -198,12 +200,12 @@ export function TransactionTable({ transactions }) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 rounded-2xl border border-gray-200 shadow-sm p-4 bg-white dark:bg-zinc-900">
       {deleteLoading && (
         <BarLoader className="mt-4" width={"100%"} color="#9333ea" />
       )}
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-wrap gap-2 items-center justify-between p-4 rounded-xl border bg-muted">
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
           <Input
@@ -213,7 +215,7 @@ export function TransactionTable({ transactions }) {
               setSearchTerm(e.target.value);
               setCurrentPage(1);
             }}
-            className="pl-8"
+            className="pl-8 h-9 w-[100%] text-sm"
           />
         </div>
         <div className="flex gap-2">
@@ -240,7 +242,7 @@ export function TransactionTable({ transactions }) {
               setCurrentPage(1);
             }}
           >
-            <SelectTrigger className="w-[130px]">
+            <SelectTrigger className="w-[160px]">
               <SelectValue placeholder="All Transactions" />
             </SelectTrigger>
             <SelectContent>
@@ -279,8 +281,9 @@ export function TransactionTable({ transactions }) {
       {/* Transactions Table */}
       <div className="rounded-md border">
         <Table>
-          <TableHeader>
-            <TableRow>
+        <TableHeader className="sticky top-0 z-10 backdrop-blur-md bg-white/75 dark:bg-zinc-900/75">
+
+            <TableRow >
               <TableHead className="w-[50px]">
                 <Checkbox
                   checked={
@@ -288,6 +291,9 @@ export function TransactionTable({ transactions }) {
                     paginatedTransactions.length > 0
                   }
                   onCheckedChange={handleSelectAll}
+                  className={cn(
+                    selectedIds.includes(transactions.id) ? "ring-2 ring-purple-500 ring-offset-1" : ""
+                  )}
                 />
               </TableHead>
               <TableHead
@@ -339,7 +345,7 @@ export function TransactionTable({ transactions }) {
           </TableHeader>
           <TableBody>
             {paginatedTransactions.length === 0 ? (
-              <TableRow>
+              <TableRow className="even:bg-muted/50 hover:bg-accent transition-colors" >
                 <TableCell
                   colSpan={7}
                   className="text-center text-muted-foreground"
@@ -388,7 +394,7 @@ export function TransactionTable({ transactions }) {
                         <TooltipTrigger>
                           <Badge
                             variant="secondary"
-                            className="gap-1 bg-purple-100 text-purple-700 hover:bg-purple-200"
+                            className="gap-1 bg-purple-100 text-purple-800 hover:bg-purple-200 border border-purple-300 px-2 py-0.5 text-xs rounded-md"
                           >
                             <RefreshCw className="h-3 w-3" />
                             {RECURRING_INTERVALS[transaction.recurringInterval]}
@@ -422,6 +428,8 @@ export function TransactionTable({ transactions }) {
                             )
                           }
                         >
+                          <Pencil className="h-4 w-4 mr-2" />
+
                           Edit
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
@@ -429,6 +437,7 @@ export function TransactionTable({ transactions }) {
                           className="text-destructive"
                           onClick={() => deleteFn([transaction.id])}
                         >
+                          <Trash2 className="h-4 w-4 mr-2" />
                           Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -443,16 +452,17 @@ export function TransactionTable({ transactions }) {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-2">
+        <div className="flex justify-center items-center mt-4 gap-2">
           <Button
             variant="outline"
             size="icon"
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
+            
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
-          <span className="text-sm">
+          <span className="text-sm text-muted-foreground">
             Page {currentPage} of {totalPages}
           </span>
           <Button
