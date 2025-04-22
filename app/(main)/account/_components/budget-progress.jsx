@@ -131,6 +131,11 @@ const BudgetProgress = ({ initialBudget, currentExpenses }) => {
                   : "bg-green-500"
               }`}
             />
+
+            <p className="text-xs text-muted-foreground text-right">
+               {percentUsed.toFixed(1)} % used
+            </p>
+
           </div>
         )}
       </CardContent>
