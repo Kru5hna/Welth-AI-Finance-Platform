@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { db } from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
@@ -11,17 +11,15 @@ const serializeAmount = (obj) => ({
 
 export async function createTransaction(data) {
   try {
-    const { userId } = new auth();
+    const { userId } = await auth();
+    // console.log("hehehehe",userId);
+    
     if (!userId) throw new Error("Unauthorized");
 
-    // Arcjet to add rate limiting
-
-    const user = db.user.findUnique({
+    const user = await db.user.findUnique({
       where: { clerkUserId: userId },
     });
-    if (!user) {
-      throw new Error("User not found!");
-    }
+    if (!user) throw new Error("User not found!");
 
     const account = await db.account.findUnique({
       where: {
@@ -29,9 +27,8 @@ export async function createTransaction(data) {
         userId: user.id,
       },
     });
-    if (!account) {
-      throw new Error("Account Not Found!");
-    }
+    if (!account) throw new Error(`Account not found: ${data.accountId}`);
+
     const balanceChange = data.type === "EXPENSE" ? -data.amount : data.amount;
     const newBalance = account.balance.toNumber() + balanceChange;
 
@@ -40,9 +37,10 @@ export async function createTransaction(data) {
         data: {
           ...data,
           userId: user.id,
+          date: new Date(data.date),
           nextRecurringDate:
             data.isRecurring && data.recurringInterval
-              ? calculateNextRecurringDate(data.date, data.recurringInterval)
+              ? calculateNextRecurringDate(new Date(data.date), data.recurringInterval)
               : null,
         },
       });
@@ -51,22 +49,21 @@ export async function createTransaction(data) {
         where: { id: data.accountId },
         data: { balance: newBalance },
       });
+
       return newTransaction;
     });
+
     revalidatePath("/dashboard");
     revalidatePath(`/account/${transaction.accountId}`);
 
     return { success: true, data: serializeAmount(transaction) };
   } catch (error) {
-    throw new Error(error.message)
+    throw new Error(error.message);
   }
 }
 
-// Helper function to calculate next recurring date
-
 function calculateNextRecurringDate(startDate, interval) {
   const date = new Date(startDate);
-
   switch (interval) {
     case "DAILY":
       date.setDate(date.getDate() + 1);
