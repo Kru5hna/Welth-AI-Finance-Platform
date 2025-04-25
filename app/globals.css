@@ -150,3 +150,20 @@
   opacity: 0.95; /* Slight fade effect */
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
 }
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradientMove 3s ease infinite;
+}
