@@ -141,7 +141,7 @@ Open [http://localhost:3000](http://localhost:3000) 🎉
 ## 👤 Author
 
 **Your Name**  
-GitHub: [@Kru5hna](https://github.com/Kru5hna) | LinkedIn: [Your Name](https://linkedin.com/in/yourprofile)
+GitHub: [@Kru5hna](https://github.com/Kru5hna) 
 
 ---
 
