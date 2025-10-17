@@ -17,7 +17,7 @@ const Header = async () => {
         {/* Logo */}
         <Link href="/">
           <Image
-            src="/logo3.png"
+            src="/logo2.png"
             alt="Welth logo"
             width={200}
             height={60}
