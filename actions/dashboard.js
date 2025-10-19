@@ -91,7 +91,7 @@ export async function createAccount(data) {
       
    }
 }
-
+// shows user account in a descending order pattern
 export async function getUserAccounts () {
    const {userId} = await auth();
       if(!userId) throw new Error("Unauthorized");
