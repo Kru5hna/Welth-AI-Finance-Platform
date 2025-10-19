@@ -34,7 +34,7 @@ const HeroSection = () => {
           with Intelligence
         </h1>
         
-        <p className="text-lg md:text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+        <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
           An AI-powered financial management platform that helps you track, analyze, 
           and optimize your spending with real-time insights.
         </p>
@@ -42,7 +42,7 @@ const HeroSection = () => {
         <Link href="/dashboard" className="inline-block group">
           <button className="group relative p-[3px] mt-5 overflow-hidden rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
             <span className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-500" />
-            <span className="relative block px-8 py-3 bg-black rounded-[6px] text-white font-medium transition-all duration-200 group-hover:bg-transparent cursor-pointer">
+            <span className="relative block px-8 py-3 bg-slate-950 rounded-[6px] text-white font-medium transition-all duration-200 group-hover:bg-transparent cursor-pointer">
               Get Started
             </span>
           </button>

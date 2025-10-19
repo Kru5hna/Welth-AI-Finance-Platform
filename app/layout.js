@@ -18,7 +18,7 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
       <body
-        className={`${inter.className} bg-black`}
+        className={`${inter.className} bg-zinc-900`}
       >
         {/* header */}
         <Header />
@@ -29,9 +29,9 @@ export default function RootLayout({ children }) {
         <Toaster richColors/>
 
         {/* footer */}
-      <footer className="text-gray-600 bg-blue-100 p-12 text-center">
+      <footer className="text-gray-200 p-12 text-center">
       <div className="container mx-auto px-4">
-      <p>Made with 💝 By Krushna</p> 
+      <p className="text-xl">Made with 💝 By Krushna</p> 
       </div>
       </footer>
       </body>
