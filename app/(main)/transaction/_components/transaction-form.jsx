@@ -88,11 +88,10 @@ export function AddTransactionForm({
       ...data,
       amount: parseFloat(data.amount),
     };
-    if(editMode) {
-    transactionFn(editId,formData);
+    if (editMode) {
+      transactionFn(editId, formData);
     } else {
-    transactionFn(formData);
-
+      transactionFn(formData);
     }
   };
 
@@ -128,22 +127,33 @@ export function AddTransactionForm({
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      {/* AI Receipt Scanner  */}
+    // The main form container, assuming the page background is black
+    <form className="space-y-6 text-white" onSubmit={handleSubmit(onSubmit)}>
+      
+      {!editMode && (
+        <ReceiptScanner onScanComplete={handleScanComplete}>
+          <Button
+            type="button"
+            className="w-full h-12 text-white transition-colors rounded-lg shadow-lg shadow-blue-900/50 flex items-center justify-center gap-2 font-semibold"
+          >
+            Scan Receipt with AI
+          </Button>
+        </ReceiptScanner>
+      )}
 
-      {!editMode && <ReceiptScanner onScanComplete={handleScanComplete} />
-}
-      {/* Type  */}
+      {/* Type */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Type</label>
+        <label className="text-sm font-medium text-zinc-400">Type</label>
         <Select
           onValueChange={(value) => setValue("type", value)}
           defaultValue={type}
         >
-          <SelectTrigger className="w-full">
+          {/* Custom class to integrate with black theme */}
+          <SelectTrigger className="w-full bg-zinc-900 border border-zinc-700 text-white placeholder:text-zinc-500 focus:ring-1 transition-colors">
             <SelectValue placeholder="Select Type" />
           </SelectTrigger>
-          <SelectContent>
+          {/* Need to ensure SelectContent has dark styling from shadcn/ui configuration */}
+          <SelectContent className="bg-zinc-900 border border-zinc-700 text-white">
             <SelectItem value="INCOME">Income</SelectItem>
             <SelectItem value="EXPENSE">Expense</SelectItem>
           </SelectContent>
@@ -155,43 +165,45 @@ export function AddTransactionForm({
       </div>
 
       {/* Amount and Account */}
-      <div className="grid gap-6 md: grid-cols-2">
+      <div className="grid gap-4 md:grid-cols-2">
         <div className="space-y-2">
-          <label className="text-sm font-medium">Amount</label>
+          <label className="text-sm font-medium text-zinc-400">Amount</label>
 
           <Input
             type="text"
             step="0.01"
             placeholder="0.00"
+            className="w-full h-10 bg-zinc-900 border border-zinc-700 text-white placeholder:text-zinc-500  focus:ring-0 transition-colors"
             {...register("amount")}
           />
 
-          {errors.type && (
-            <p className="text-sm text-red-500">{errors.type.message}</p>
+          {/* Corrected error check: should be errors.amount */}
+          {errors.amount && (
+            <p className="text-sm text-red-500">{errors.amount.message}</p>
           )}
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-medium">Account</label>
+          <label className="text-sm font-medium text-zinc-400">Account</label>
           <Select
             onValueChange={(value) => setValue("accountId", value)}
             defaultValue={getValues("accountId")}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full bg-zinc-900 border border-zinc-700 text-white placeholder:text-zinc-500 focus:ring-1  transition-colors">
               <SelectValue placeholder="Select Account" className="w-full" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-zinc-900 border border-zinc-700 text-white">
               {accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id}>
                   {account.name} (${parseFloat(account.balance).toFixed(2)})
                 </SelectItem>
               ))}
 
-              {/* Optional drawer trigger to create account */}
               <CreateAccountDrawer>
                 <Button
                   variant="ghost"
-                  className="w-full select-none items-center text-sm outline-none mt-2"
+                  
+                  className="w-full select-none items-center text-sm outline-none mt-2 text-white hover:text-white hover:bg-zinc-800"
                 >
                   Create Account
                 </Button>
@@ -205,18 +217,17 @@ export function AddTransactionForm({
         </div>
       </div>
 
-      {/* Category  */}
-
+      {/* Category */}
       <div className="space-y-2">
-        <label className="text-sm font-medium">Category</label>
+        <label className="text-sm font-medium text-zinc-400">Category</label>
         <Select
           onValueChange={(value) => setValue("category", value)}
           defaultValue={getValues("category")}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger className="w-full bg-zinc-900 border border-zinc-700 text-white placeholder:text-zinc-500 focus:ring-1 transition-colors">
             <SelectValue placeholder="Select category" className="w-full" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="bg-zinc-900 border border-zinc-700 text-white">
             {filteredCategories.map((category) => (
               <SelectItem key={category.id} value={category.id}>
                 {category.name}
@@ -230,23 +241,24 @@ export function AddTransactionForm({
         )}
       </div>
 
-      {/* Date  */}
-
-      <div className="space-y-2  ">
-        <label className="text-sm font-medium">Date</label>
+      {/* Date */}
+      <div className="space-y-2">
+        <label className="text-sm font-medium text-zinc-400">Date</label>
 
         <Popover>
           <PopoverTrigger asChild>
+            {/* Custom styling for the date button to match the dark theme */}
             <Button
               variant="outline"
-              className="w-full pl-3 text-left font-normal"
+              className="w-full pl-3 justify-start font-normal bg-zinc-900 border border-zinc-700 text-white hover:bg-zinc-800 hover:text-white transition-colors"
             >
               {" "}
               {date ? format(date, "PPP") : <span>Pick a date</span>}
-              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+              <CalendarIcon className="ml-auto h-4 w-4 text-zinc-400" />
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-auto p-0" align="start">
+          {/* Ensure PopoverContent/Calendar also has dark styling */}
+          <PopoverContent className="w-auto p-0 bg-zinc-900 border border-zinc-700" align="start">
             <Calendar
               mode="single"
               selected={date}
@@ -266,40 +278,49 @@ export function AddTransactionForm({
 
       {/* Description */}
       <div className="space-y-2">
-        <label className="text-sm font-medium ">Description</label>
-        <Input placeholder="Enter description" {...register("description")} />
+        <label className="text-sm font-medium text-zinc-400">Description</label>
+        <Input
+          placeholder="Enter description"
+          className="w-full h-10 bg-zinc-900 border border-zinc-700 text-white placeholder:text-zinc-500  focus:ring-0 transition-colors"
+          {...register("description")}
+        />
         {errors.description && (
           <p className="text-sm text-red-500">{errors.description.message}</p>
         )}
       </div>
 
-      {/* Recurring Toggle */}
-      <div className="flex flex-row items-center justify-between rounded-lg border p-4">
-        <div className="space-y-0.5 ">
-          <label className="text-base font-medium">Recurring Transaction</label>
-          <div className="text-sm text-muted-foreground">
+
+      <div className="flex flex-row items-center justify-between rounded-lg border border-zinc-700 bg-zinc-900 p-4">
+        <div className="space-y-0.5">
+          <label className="text-base font-medium text-white">
+            Recurring Transaction
+          </label>
+          {/* Use zinc-500 for muted text */}
+          <div className="text-sm text-zinc-500">
             Set up a recurring schedule for this transaction
           </div>
         </div>
         <Switch
           checked={isRecurring}
           onCheckedChange={(checked) => setValue("isRecurring", checked)}
+          className="data-[state=checked]:bg-white data-[state=unchecked]:bg-zinc-700"
         />
       </div>
 
-      {/* Recurring Interval  */}
-
+      {/* Recurring Interval */}
       {isRecurring && (
-        <div className="space-y-2 ">
-          <label className="text-sm font-medium">Recurring Interval</label>
+        <div className="space-y-2 border-t border-zinc-800 pt-6">
+          <label className="text-sm font-medium text-zinc-400">
+            Recurring Interval
+          </label>
           <Select
             onValueChange={(value) => setValue("recurringInterval", value)}
             defaultValue={getValues("recurringInterval")}
           >
-            <SelectTrigger className="w-full">
+            <SelectTrigger className="w-full bg-zinc-900 border border-zinc-700 text-white placeholder:text-zinc-500 focus:ring-1  transition-colors">
               <SelectValue placeholder="Select Interval" className="w-full" />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="bg-zinc-900 border border-zinc-700 text-white">
               <SelectItem value="DAILY">Daily</SelectItem>
               <SelectItem value="WEEKLY">Weekly</SelectItem>
               <SelectItem value="MONTHLY">Monthly</SelectItem>
@@ -314,19 +335,11 @@ export function AddTransactionForm({
           )}
         </div>
       )}
-      {/* Action  */}
-      <div className="flex flex-col sm:flex-row sm:gap-4 mt-6">
-        <Button
-          type="button"
-          variant="outline"
-          className="w-full sm:w-1/2"
-          onClick={() => router.back()}
-        >
-          Cancel
-        </Button>
+      {/* Action */}
+      <div className="flex flex-col sm:flex-row-reverse sm:gap-4 mt-8 pt-4 border-t border-zinc-800">
         <Button
           type="submit"
-          className="w-full sm:w-1/2 mt-2 sm:mt-0"
+          className="w-full sm:w-1/2 mt-2 sm:mt-0 bg-white text-black hover:bg-gray-300 transition-colors font-semibold hover:scale-95 duration-200 "
           disabled={transactionLoading}
         >
           {transactionLoading ? (
@@ -339,6 +352,15 @@ export function AddTransactionForm({
           ) : (
             "Create Transaction"
           )}
+        </Button>
+        <Button
+          type="button"
+          // Secondary button: subtle outline
+          variant="outline"
+          className="w-full sm:w-1/2 border-zinc-700 bg-transparent text-white hover:border-zinc-700 transition-colors hover:scale-95 duration-200 hover:bg-transparent hover:text-white"
+          onClick={() => router.back()}
+        >
+          Cancel
         </Button>
       </div>
     </form>

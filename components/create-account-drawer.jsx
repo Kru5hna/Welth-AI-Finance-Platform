@@ -75,9 +75,11 @@ export function CreateAccountDrawer({ children }) {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>{children}</DrawerTrigger>
-      <DrawerContent className="space-y-4">
-        <DrawerHeader className="border-b pb-2">
-          <DrawerTitle className="text-lg font-semibold">Create New Account</DrawerTitle>
+      <DrawerContent className="bg-zinc-950 border-zinc-800">
+        <DrawerHeader className="border-b border-zinc-800 pb-4">
+          <DrawerTitle className="text-xl font-semibold text-white">
+            Create New Account
+          </DrawerTitle>
         </DrawerHeader>
   
         <div className="px-4 pb-6 overflow-y-auto">
@@ -85,44 +87,52 @@ export function CreateAccountDrawer({ children }) {
   
             {/* Account Name */}
             <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium text-foreground">
+              <label htmlFor="name" className="text-sm font-medium text-gray-300">
                 Account Name
               </label>
               <Input
                 id="name"
                 placeholder="e.g., Main Checking"
+                className="bg-zinc-900 border-zinc-800 text-white placeholder:text-gray-500 focus:border-zinc-700"
                 {...register("name")}
               />
               {errors.name && (
-                <p className="text-xs text-red-500">{errors.name.message}</p>
+                <p className="text-xs text-red-400">{errors.name.message}</p>
               )}
             </div>
   
             {/* Account Type */}
-            <div className="space-y-2">
-              <label htmlFor="type" className="text-sm font-medium text-foreground">
+            <div className="space-y-2 text-white">
+              <label htmlFor="type" className="text-sm font-medium text-gray-300">
                 Account Type
               </label>
               <Select
                 onValueChange={(value) => setValue("type", value)}
                 defaultValue={watch("type")}
               >
-                <SelectTrigger id="type">
-                  <SelectValue placeholder="Select account type" />
+                <SelectTrigger 
+                  id="type"
+                  className="bg-zinc-900 border-zinc-800  focus:border-zinc-700 text-white"
+                >
+                  <SelectValue placeholder="Select account type"  />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="CURRENT">Current</SelectItem>
-                  <SelectItem value="SAVINGS">Savings</SelectItem>
+                <SelectContent className="bg-zinc-900 border-zinc-800">
+                  <SelectItem value="CURRENT" className="text-white ">
+                    Current
+                  </SelectItem>
+                  <SelectItem value="SAVINGS" className="text-white ">
+                    Savings
+                  </SelectItem>
                 </SelectContent>
               </Select>
               {errors.type && (
-                <p className="text-xs text-red-500">{errors.type.message}</p>
+                <p className="text-xs text-red-400">{errors.type.message}</p>
               )}
             </div>
   
             {/* Initial Balance */}
             <div className="space-y-2">
-              <label htmlFor="balance" className="text-sm font-medium text-foreground">
+              <label htmlFor="balance" className="text-sm font-medium text-gray-300">
                 Initial Balance
               </label>
               <Input
@@ -130,20 +140,21 @@ export function CreateAccountDrawer({ children }) {
                 type="number"
                 step="0.01"
                 placeholder="0.00"
+                className="bg-zinc-900 border-zinc-800 text-white placeholder:text-gray-500 focus:border-zinc-700"
                 {...register("balance")}
               />
               {errors.balance && (
-                <p className="text-xs text-red-500">{errors.balance.message}</p>
+                <p className="text-xs text-red-400">{errors.balance.message}</p>
               )}
             </div>
   
             {/* Default Account Toggle */}
-            <div className="flex items-center justify-between rounded-xl border p-4 bg-muted">
+            <div className="flex items-center justify-between rounded-xl border border-zinc-800 p-4 bg-zinc-900">
               <div className="space-y-1">
-                <label htmlFor="isDefault" className="text-sm font-medium">
+                <label htmlFor="isDefault" className="text-sm font-medium text-white">
                   Set as Default
                 </label>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-gray-400">
                   This will be the default account for new transactions.
                 </p>
               </div>
@@ -155,19 +166,19 @@ export function CreateAccountDrawer({ children }) {
             </div>
   
             {/* Action Buttons */}
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-16 pt-8">
               <DrawerClose asChild>
                 <Button
                   type="button"
                   variant="outline"
-                  className="flex-1 border-muted-foreground"
+                  className="flex-1 bg-transparent border-zinc-700 text-white hover:bg-zinc-900 hover:text-white hover:scale-95 cursor-pointer"
                 >
                   Cancel
                 </Button>
               </DrawerClose>
               <Button
                 type="submit"
-                className="flex-1"
+                className="flex-1 bg-white text-black hover:bg-gray-100 hover:scale-95 cursor-pointer"
                 disabled={createAccountLoading}
               >
                 {createAccountLoading ? (
@@ -186,5 +197,4 @@ export function CreateAccountDrawer({ children }) {
       </DrawerContent>
     </Drawer>
   );
-  
 }
