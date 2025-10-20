@@ -1,12 +1,23 @@
 import HeroSection from "@/components/hero";
 import { Card, CardContent } from "@/components/ui/card";
-import { featuresData, howItWorksData, statsData, testimonialsData } from "@/data/landing";
+import { Vortex } from "@/components/ui/vortex";
+import { featuresData, howItWorksData, testimonialsData } from "@/data/landing";
 import Image from "next/image";
 
 export default function Home() {
   return (
-    <main className="mt-40 text-white min-h-screen">
-      <HeroSection />
+    <main className="mt-40 text-white min-h-screen bg-black">
+       <Vortex
+        backgroundColor="black"
+        rangeY={1200}
+        particleCount={800}
+        baseHue={120}
+        className="flex items-center flex-col justify-center px-2 md:px-10  py-4 w-full h-full "
+      >
+      
+        
+      <HeroSection className="relative z-10" />
+      </Vortex>
 
       {/* Features */}
       <section id="features" className="py-20">

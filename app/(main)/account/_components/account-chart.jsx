@@ -74,8 +74,6 @@ export function AccountChart({ transactions }) {
   return (
     <div className="w-full max-w-5xl mx-auto p-0">
       {" "}
-      {/* Adjusted padding */}
-      {/* 1. Card Container: Dark Background and Border */}
       <Card className="bg-zinc-900 border border-zinc-800 shadow-xl rounded-xl text-white">
         <CardHeader className="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-zinc-800 pb-4">
           <CardTitle className="text-2xl font-semibold text-white">
