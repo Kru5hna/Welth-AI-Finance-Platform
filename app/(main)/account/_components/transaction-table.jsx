@@ -57,7 +57,6 @@ import useFetch from "@/hooks/use-fetch";
 import { BarLoader } from "react-spinners";
 import { useRouter } from "next/navigation";
 
-
 const ITEMS_PER_PAGE = 10;
 
 const RECURRING_INTERVALS = {
@@ -204,11 +203,11 @@ export function TransactionTable({ transactions }) {
     <div className="space-y-4 rounded-xl border border-zinc-800 shadow-xl p-4 bg-zinc-900 text-white">
       {deleteLoading && (
         // Use blue accent color for the loader
-        <BarLoader className="mt-4" width={"100%"} color="#3b82f6" /> 
+        <BarLoader className="mt-4" width={"100%"} color="#3b82f6" />
       )}
       {/* Filters */}
       {/* Filter Container: Dark background/border */}
-      <div className="flex flex-wrap gap-2 items-center justify-between p-4 rounded-xl border border-zinc-700 bg-zinc-800"> 
+      <div className="flex flex-wrap gap-2 items-center justify-between p-4 rounded-xl border border-zinc-700 bg-zinc-800">
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-zinc-400" />
           {/* Search Input: Dark styling */}
@@ -263,7 +262,7 @@ export function TransactionTable({ transactions }) {
                 variant="destructive"
                 size="sm"
                 // Using red-600 for destructive actions
-                className="bg-red-600 hover:bg-red-700" 
+                className="bg-red-600 hover:bg-red-700"
                 onClick={handleBulkDelete}
               >
                 <Trash className="h-4 w-4 mr-2" />
@@ -290,100 +289,92 @@ export function TransactionTable({ transactions }) {
       {/* Transactions Table */}
       <div className="rounded-md border border-zinc-700">
         <Table>
-          {/* 2. Table Header: Fixed Dark Background */}
           <TableHeader className="sticky top-0 z-10 bg-zinc-800 border-b border-zinc-700 text-zinc-400">
-            <TableRow className="hover:bg-zinc-800/90 border-zinc-700"> 
+            <TableRow className="hover:bg-zinc-800/90 border-zinc-700">
               <TableHead className="w-[50px]">
-                {/* Checkbox: Needs styling update for dark mode if defaults don't work */}
                 <Checkbox
                   checked={
                     selectedIds.length === paginatedTransactions.length &&
                     paginatedTransactions.length > 0
                   }
                   onCheckedChange={handleSelectAll}
-                  // Using blue accent for checked state
                   className="data-[state=checked]:bg-blue-500 data-[state=checked]:text-white border-zinc-500"
                 />
               </TableHead>
-              {/* ... (TableHead elements with sorting logic remain the same) ... */}
               <TableHead
-                className="cursor-pointer text-zinc-400"
-                onClick={() => handleSort("date")}
-              >
-                <div className="flex items-center">
-                  Date
-                  {sortConfig.field === "date" &&
-                    (sortConfig.direction === "asc" ? (
-                      <ChevronUp className="ml-1 h-4 w-4" />
-                    ) : (
-                      <ChevronDown className="ml-1 h-4 w-4" />
-                    ))}
-                </div>
-              </TableHead>
-              <TableHead className="text-zinc-400">Description</TableHead>
+                className="cursor-pointer text-zinc-400"
+                onClick={() => handleSort("date")}
+              >
+                <div className="flex items-center">
+                  Date
+                  {sortConfig.field === "date" &&
+                    (sortConfig.direction === "asc" ? (
+                      <ChevronUp className="ml-1 h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="ml-1 h-4 w-4" />
+                    ))}
+                </div>
+              </TableHead>
+              <TableHead className="text-zinc-400">Description</TableHead>
               <TableHead
-                className="cursor-pointer text-zinc-400"
-                onClick={() => handleSort("category")}
-              >
-                <div className="flex items-center">
-                  Category
-                  {sortConfig.field === "category" &&
-                    (sortConfig.direction === "asc" ? (
-                      <ChevronUp className="ml-1 h-4 w-4" />
-                    ) : (
-                      <ChevronDown className="ml-1 h-4 w-4" />
-                    ))}
-                </div>
-              </TableHead>
-              <TableHead
-                className="cursor-pointer text-right text-zinc-400"
-                onClick={() => handleSort("amount")}
-              >
-                <div className="flex items-center justify-end">
-                  Amount
-                  {sortConfig.field === "amount" &&
-                    (sortConfig.direction === "asc" ? (
-                      <ChevronUp className="ml-1 h-4 w-4" />
-                    ) : (
-                      <ChevronDown className="ml-1 h-4 w-4" />
-                    ))}
-                </div>
-              </TableHead>
+                className="cursor-pointer text-zinc-400"
+                onClick={() => handleSort("category")}
+              >
+                <div className="flex items-center">
+                  Category
+                  {sortConfig.field === "category" &&
+                    (sortConfig.direction === "asc" ? (
+                      <ChevronUp className="ml-1 h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="ml-1 h-4 w-4" />
+                    ))}
+                </div>
+              </TableHead>
+              <TableHead
+                className="cursor-pointer text-right text-zinc-400"
+                onClick={() => handleSort("amount")}
+              >
+                <div className="flex items-center justify-end">
+                  Amount
+                  {sortConfig.field === "amount" &&
+                    (sortConfig.direction === "asc" ? (
+                      <ChevronUp className="ml-1 h-4 w-4" />
+                    ) : (
+                      <ChevronDown className="ml-1 h-4 w-4" />
+                    ))}
+                </div>
+              </TableHead>
               <TableHead className="text-zinc-400">Recurring</TableHead>
-              <TableHead className="w-[50px]" />
+              <TableHead className="w-[50px]" />
             </TableRow>
           </TableHeader>
 
-          {/* 3. Table Body/Rows: Dark/Zebra Styling */}
           <TableBody>
             {paginatedTransactions.length === 0 ? (
-              <TableRow className="even:bg-zinc-900 hover:bg-zinc-800 transition-colors border-zinc-700"> 
-                <TableCell
-                  colSpan={7}
-                  className="text-center text-zinc-500"
-                >
+              <TableRow className="even:bg-zinc-900 hover:bg-zinc-800 transition-colors border-zinc-700">
+                <TableCell colSpan={7} className="text-center text-zinc-500">
                   No transactions found
                 </TableCell>
               </TableRow>
             ) : (
               paginatedTransactions.map((transaction) => (
-                // Alternating row colors for better readability
-                <TableRow 
-                  key={transaction.id} 
+                <TableRow
+                  key={transaction.id}
                   className="even:bg-zinc-900 hover:bg-zinc-800 transition-colors border-zinc-800"
                 >
                   <TableCell>
                     <Checkbox
                       checked={selectedIds.includes(transaction.id)}
                       onCheckedChange={() => handleSelect(transaction.id)}
-                      // Using blue accent for checked state
                       className="data-[state=checked]:bg-blue-500 data-[state=checked]:text-white border-zinc-500"
                     />
                   </TableCell>
                   <TableCell className="text-zinc-300">
                     {format(new Date(transaction.date), "PP")}
                   </TableCell>
-                  <TableCell className="text-white">{transaction.description}</TableCell>
+                  <TableCell className="text-white">
+                    {transaction.description}
+                  </TableCell>
                   <TableCell className="capitalize">
                     <span
                       style={{
@@ -398,35 +389,39 @@ export function TransactionTable({ transactions }) {
                     className={cn(
                       "text-right font-medium",
                       transaction.type === "EXPENSE"
-                        ? "text-red-400" 
+                        ? "text-red-400"
                         : "text-green-400"
                     )}
                   >
-                    {transaction.type === "EXPENSE" ? "-" : "+"}${transaction.amount.toFixed(2)}
+                    {transaction.type === "EXPENSE" ? "-" : "+"}$
+                    {transaction.amount.toFixed(2)}
                   </TableCell>
                   <TableCell>
                     {transaction.isRecurring ? (
                       <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Badge
-                            variant="secondary"
-                            // Dark styling for recurring badge (purple-950/purple-400)
-                            className="gap-1 bg-purple-950/50 text-purple-400 hover:bg-purple-900/60 border border-purple-800/50 px-2 py-0.5 text-xs rounded-md"
-                          >
-                            <RefreshCw className="h-3 w-3" />
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Badge
+                              variant="secondary"
+                              className="gap-1 bg-purple-950/50 text-purple-400 hover:bg-purple-900/60 border border-purple-800/50 px-2 py-0.5 text-xs rounded-md"
+                            >
+                              <RefreshCw className="h-3 w-3" />
+                              {
+                                RECURRING_INTERVALS[
+                                  transaction.recurringInterval
+                                ]
+                              }
+                            </Badge>
+                          </TooltipTrigger>
+                          <TooltipContent className="bg-zinc-800 border-zinc-700 text-white">
+                            Recurs{" "}
                             {RECURRING_INTERVALS[transaction.recurringInterval]}
-                          </Badge>
-                        </TooltipTrigger>
-                        {/* Tooltip content inherits dark styling from global config or needs custom styling */}
-                        <TooltipContent className="bg-zinc-800 border-zinc-700 text-white">
-                          Recurs {RECURRING_INTERVALS[transaction.recurringInterval]}
-                        </TooltipContent>
-                      </Tooltip>
+                          </TooltipContent>
+                        </Tooltip>
                       </TooltipProvider>
                     ) : (
-                      <Badge 
-                        variant="outline" 
+                      <Badge
+                        variant="outline"
                         className="gap-1 bg-zinc-800 border-zinc-700 text-zinc-400"
                       >
                         <Clock className="h-3 w-3" />
@@ -437,12 +432,17 @@ export function TransactionTable({ transactions }) {
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0 text-zinc-400 hover:bg-zinc-700">
+                        <Button
+                          variant="ghost"
+                          className="h-8 w-8 p-0 text-zinc-400 hover:bg-zinc-700"
+                        >
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      {/* Dropdown content inherits dark styling from global config or needs custom styling */}
-                      <DropdownMenuContent align="end" className="bg-zinc-800 border-zinc-700 text-white">
+                      <DropdownMenuContent
+                        align="end"
+                        className="bg-zinc-800 border-zinc-700 text-white"
+                      >
                         <DropdownMenuItem
                           onClick={() =>
                             router.push(
@@ -453,10 +453,9 @@ export function TransactionTable({ transactions }) {
                           <Pencil className="h-4 w-4 mr-2" />
                           Edit
                         </DropdownMenuItem>
-                        <DropdownMenuSeparator className="bg-zinc-700"/>
+                        <DropdownMenuSeparator className="bg-zinc-700" />
                         <DropdownMenuItem
-                          // Destructive text color for dark mode
-                          className="text-red-400 hover:text-red-300 focus:bg-red-900/50" 
+                          className="text-red-400 hover:text-red-300 focus:bg-red-900/50"
                           onClick={() => deleteFn([transaction.id])}
                         >
                           <Trash2 className="h-4 w-4 mr-2" />
