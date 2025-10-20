@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -77,17 +72,22 @@ export function AccountChart({ transactions }) {
   }, [filteredData]);
 
   return (
-    <div className="w-full max-w-5xl mx-auto p-6">
-      <Card className="bg-gradient-to-br from-white to-zinc-100 shadow-md rounded-xl">
-        <CardHeader className="flex flex-col md:flex-row justify-between items-center gap-4">
-          <CardTitle className="text-2xl font-semibold text-zinc-800">
+    <div className="w-full max-w-5xl mx-auto p-0">
+      {" "}
+      {/* Adjusted padding */}
+      {/* 1. Card Container: Dark Background and Border */}
+      <Card className="bg-zinc-900 border border-zinc-800 shadow-xl rounded-xl text-white">
+        <CardHeader className="flex flex-col md:flex-row justify-between items-center gap-4 border-b border-zinc-800 pb-4">
+          <CardTitle className="text-2xl font-semibold text-white">
             📊 Transaction Summary
           </CardTitle>
           <Select onValueChange={setDateRange} value={dateRange}>
-            <SelectTrigger className="w-[200px] border border-zinc-300 shadow-sm rounded-md">
+            {/* Select Trigger: Dark styling */}
+            <SelectTrigger className="w-[200px] bg-zinc-800 border border-zinc-700 text-white shadow-sm rounded-md hover:bg-zinc-700">
               <SelectValue placeholder="Select Range" />
             </SelectTrigger>
-            <SelectContent>
+            {/* Select Content: Dark styling (Assumes shadcn/ui is configured for dark mode) */}
+            <SelectContent className="bg-zinc-800 border-zinc-700 text-white">
               {Object.entries(DATE_RANGES).map(([key, { label }]) => (
                 <SelectItem key={key} value={key}>
                   {label}
@@ -97,27 +97,31 @@ export function AccountChart({ transactions }) {
           </Select>
         </CardHeader>
 
-        <CardContent>
+        <CardContent className="p-6">
+          {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8 text-center">
-            <div className="bg-green-50 p-4 rounded-lg shadow-sm">
-              <p className="text-sm text-zinc-500">Total Income</p>
-              <p className="text-xl font-bold text-green-600">
+            {/* Income Card: Darker green background */}
+            <div className="bg-green-950/30 border border-green-700/50 p-4 rounded-lg shadow-sm">
+              <p className="text-sm text-zinc-400">Total Income</p>
+              <p className="text-xl font-bold text-green-400">
                 ${totals.income.toFixed(2)}
               </p>
             </div>
-            <div className="bg-red-50 p-4 rounded-lg shadow-sm">
-              <p className="text-sm text-zinc-500">Total Expenses</p>
-              <p className="text-xl font-bold text-red-500">
+            {/* Expense Card: Darker red background */}
+            <div className="bg-red-950/30 border border-red-700/50 p-4 rounded-lg shadow-sm">
+              <p className="text-sm text-zinc-400">Total Expenses</p>
+              <p className="text-xl font-bold text-red-400">
                 ${totals.expense.toFixed(2)}
               </p>
             </div>
-            <div className="bg-blue-50 p-4 rounded-lg shadow-sm">
-              <p className="text-sm text-zinc-500">Net</p>
+            {/* Net Card: Darker blue background */}
+            <div className="bg-blue-950/30 border border-blue-700/50 p-4 rounded-lg shadow-sm">
+              <p className="text-sm text-zinc-400">Net</p>
               <p
                 className={`text-xl font-bold ${
                   totals.income - totals.expense >= 0
-                    ? "text-green-600"
-                    : "text-red-500"
+                    ? "text-green-400"
+                    : "text-red-400"
                 }`}
               >
                 ${(totals.income - totals.expense).toFixed(2)}
@@ -125,32 +129,51 @@ export function AccountChart({ transactions }) {
             </div>
           </div>
 
-          <div className="h-[350px] bg-white rounded-lg shadow-inner p-4">
+          {/* 2. Chart Area: Dark Background */}
+          <div className="h-[350px] bg-zinc-800 border border-zinc-700 rounded-lg shadow-inner p-4">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={filteredData}
                 margin={{ top: 10, right: 30, left: 0, bottom: 5 }}
               >
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="date" fontSize={12} />
+                {/* Recharts elements for dark theme */}
+                <CartesianGrid
+                  stroke="#3f3f46"
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />{" "}
+                {/* zinc-700 */}
+                <XAxis dataKey="date" fontSize={12} stroke="#a1a1aa" />{" "}
+                {/* zinc-400 */}
                 <YAxis
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
                   tickFormatter={(value) => `$${value}`}
+                  stroke="#a1a1aa" // zinc-400
                 />
-                <Tooltip formatter={(value) => [`$${value}`, undefined]} />
-                <Legend />
+                {/* Custom dark Tooltip (assuming you style Recharts Tooltip component globally or via custom component) */}
+                <Tooltip
+                  formatter={(value) => [`$${value}`, undefined]}
+                  contentStyle={{
+                    backgroundColor: "#27272a",
+                    border: "1px solid #3f3f46",
+                    color: "#fff",
+                  }} // zinc-800 / zinc-700
+                  itemStyle={{ color: "#fff" }}
+                />
+                <Legend wrapperStyle={{ color: "#fff" }} />{" "}
+                {/* Legend text color */}
                 <Bar
                   dataKey="income"
                   name="Income"
-                  fill="#4ade80"
+                  fill="#4ade80" // green-400
                   radius={[4, 4, 0, 0]}
                 />
                 <Bar
                   dataKey="expense"
                   name="Expense"
-                  fill="#f87171"
+                  fill="#f87171" // red-400
                   radius={[4, 4, 0, 0]}
                 />
               </BarChart>

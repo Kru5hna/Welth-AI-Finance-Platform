@@ -49,7 +49,7 @@ export async function updateDefaultAccount(accountId) {
 
     return {
       success: true,
-      data: serializedTransaction(account), // ✅ use this if needed on UI
+      data: serializedTransaction(account),
     };
   } catch (error) {
     console.error("Update default error →", error);
@@ -61,41 +61,7 @@ export async function updateDefaultAccount(accountId) {
 }
 
 export async function getAccountWithTransactions(accountId) {
-   const { userId } = await auth();
-  if (!userId) throw new Error("Unauthorized");
-
-  const user = await db.user.findUnique({
-    where: { clerkUserId: userId },
-  });
-
-  if (!user) throw new Error("User not found");
-
-  const account = await db.account.findUnique({
-   where: {
-      id: accountId,
-      userId: user.id
-   },
-   include: {
-      transactions :{
-         orderBy : {date: "desc"},
-      },
-      _count: {
-         select: {transactions : true},
-      }
-   }
-  })
-
-  if (!account) return null;
-
-  return{
-   ...serializedTransaction(account),
-   transactions: account.transactions.map(serializedTransaction)
-  };
-
-}
-
-export async function bulkDeleteTransactions(transactionIds) {
-  try {
+  // very similar just first verify the user
   const { userId } = await auth();
   if (!userId) throw new Error("Unauthorized");
 
@@ -105,56 +71,90 @@ export async function bulkDeleteTransactions(transactionIds) {
 
   if (!user) throw new Error("User not found");
 
-  const transactions = await db.transaction.findMany({
+  const account = await db.account.findUnique({
     where: {
-      id: {in : transactionIds },
-      userId : user.id,
+      id: accountId,
+      userId: user.id,
     },
-  })
+    include: {
+      transactions: {
+        orderBy: { date: "desc" },
+      },
+      _count: {
+        select: { transactions: true },
+      },
+    },
+  });
 
-  const accountBalanceChanges = transactions.reduce((acc,transaction) => {
-    const change = 
-      transaction.type === "EXPENSE"
-        ? transaction.amount
-        : -transaction.amount;
+  if (!account) return null;
 
-        acc[transaction.accountId] = (acc[transaction.accountId] || 0) + change;
-        return acc;
-  }, {})
-
-  // Delete transactions and update account balance in a transaction
-
-  await db.$transaction(async (tx) => {
-    //  delete the transaction
-
-    await tx.transaction.deleteMany({
-      where: {
-        id:{in: transactionIds},
-        userId: user.id 
-      }
-    })
-
-    for(const [accountId, balanceChange] of Object.entries(
-      accountBalanceChanges
-    )) {
-      await tx.account.update({
-        data: {
-          balance: {
-            increment: balanceChange
-          }
-        }
-      })
-    }
-  })
-
-  revalidatePath("/dashboard");
-  revalidatePath("/account/[id]");
-
-  return {success: true};
-  } catch (error) {
   return {
-    success: false,
-    error: error.message
-  }    
+    ...serializedTransaction(account), // converts all of the decimals to the number 
+    transactions: account.transactions.map(serializedTransaction),
+  };
+}
+
+export async function bulkDeleteTransactions(transactionIds) {
+  try {
+    const { userId } = await auth();
+    if (!userId) throw new Error("Unauthorized");
+
+    const user = await db.user.findUnique({
+      where: { clerkUserId: userId },
+    });
+
+    if (!user) throw new Error("User not found");
+
+    const transactions = await db.transaction.findMany({
+      where: {
+        id: { in: transactionIds },
+        userId: user.id,
+      },
+    });
+
+    const accountBalanceChanges = transactions.reduce((acc, transaction) => {
+      const change =
+        transaction.type === "EXPENSE"
+          ? transaction.amount
+          : -transaction.amount;
+
+      acc[transaction.accountId] = (acc[transaction.accountId] || 0) + change;
+      return acc;
+    }, {});
+
+    // Delete transactions and update account balance in a transaction
+
+    await db.$transaction(async (tx) => {
+      //  delete the transaction
+
+      await tx.transaction.deleteMany({
+        where: {
+          id: { in: transactionIds },
+          userId: user.id,
+        },
+      });
+
+      for (const [accountId, balanceChange] of Object.entries(
+        accountBalanceChanges
+      )) {
+        await tx.account.update({
+          data: {
+            balance: {
+              increment: balanceChange,
+            },
+          },
+        });
+      }
+    });
+
+    revalidatePath("/dashboard");
+    revalidatePath("/account/[id]");
+
+    return { success: true };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message,
+    };
   }
 }

@@ -1,13 +1,12 @@
 import { getAccountWithTransactions } from '@/actions/account'
 import { notFound } from 'next/navigation';
 import React, { Suspense } from 'react'
-import { BarLoader } from 'react-spinners';
-import {TransactionTable} from '../_components/transaction-table';
+import { BarLoader } from 'react-spinners'; // Keep this for loading states
+import { TransactionTable } from '../_components/transaction-table';
 import { AccountChart } from '../_components/account-chart';
 
 const AccountsPage = async ({ params }) => {
-  const id = params?.id;
-
+  const { id } = await params; 
   if (!id) notFound();
 
   const accountData = await getAccountWithTransactions(id);
@@ -17,46 +16,55 @@ const AccountsPage = async ({ params }) => {
   }
 
   const { transactions, ...account } = accountData;
-
-
+  
+  const transactionCount = account._count.transactions;
 
   return (
-   <div className="space-y-8 px-5">
-   <div className="flex gap-4 items-end justify-between">
-     <div>
-       <h1 className="text-5xl sm:text-6xl font-bold tracking-tight gradient-title capitalize">
-         {account.name}
-       </h1>
-       <p className="text-muted-foreground">
-         {account.type.charAt(0) + account.type.slice(1).toLowerCase()}{" "}
-         Account
-       </p>
-     </div>
+    <div className="space-y-10 p-4 sm:p-8 md:p-10 text-white bg-black min-h-screen">
+      
+      {/* Header and Summary Section  */}
+      <div className="flex flex-col md:flex-row md:justify-between md:items-end border-b border-zinc-800 pb-6">
+        {/* Account Name & Type */}
+        <div>
+          <h1 className="text-4xl font-extrabold tracking-tight mb-1">
+            {account.name}
+          </h1>
+          <p className="text-base font-medium text-blue-400">
+            {account.type.charAt(0) + account.type.slice(1).toLowerCase()} Account
+          </p>
+        </div>
 
-     <div className="text-right pb-2">
-       <div className="text-xl sm:text-2xl font-bold">
-         ${parseFloat(account.balance).toFixed(2)}
-       </div>
-       <p className="text-sm text-muted-foreground">
-         {account._count.transactions} Transactions
-       </p>
-     </div>
-   </div>
+        <div className="mt-4 md:mt-0 md:text-right">
+          <div className="text-4xl font-bold tracking-tight text-white">
+            ${parseFloat(account.balance).toFixed(2)}
+          </div>
+          <p className="text-sm text-zinc-500 mt-1">
+            {transactionCount} Transaction{transactionCount !== 1 ? 's' : ''}
+          </p>
+        </div>
+      </div>
 
-   {/* Chart Section */}
-   <Suspense
-     fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea" />}
-   >
-     <AccountChart transactions={transactions} />
-   </Suspense>
+      {/* Chart Section */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold border-l-4 border-blue-500 pl-3">
+          Spending Overview
+        </h2>
+        <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 sm:p-6 shadow-xl">
+          <Suspense fallback={<BarLoader color="#3b82f6" width="100%" />}>
+            <AccountChart transactions={transactions} /> 
+          </Suspense>
+        </div>
+      </div>
+      
+      {/* Transaction Table Section */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold border-l-4 border-blue-500 pl-3">
+          Recent Transactions
+        </h2>
+        <TransactionTable transactions={transactions} /> 
+      </div>
 
-   {/* Transactions Table */}
-   <Suspense
-     fallback={<BarLoader className="mt-4" width={"100%"} color="#9333ea" />}
-   >
-     <TransactionTable transactions={transactions} />
-   </Suspense>
- </div>
+    </div>
   )
 }
 

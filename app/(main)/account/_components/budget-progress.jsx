@@ -61,7 +61,7 @@ const BudgetProgress = ({ initialBudget, currentExpenses }) => {
   };
 
   return (
-    <Card className="mb-9">
+    <Card className="mb-9 bg-transparent text-white">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex-1">
           <CardTitle>Monthly Budget (Default Account) </CardTitle>

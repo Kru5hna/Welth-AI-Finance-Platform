@@ -1,9 +1,12 @@
 "use client";
 
-
 import { updateDefaultAccount } from "@/actions/account";
 import {
-  Card, CardHeader, CardTitle, CardContent, CardFooter
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
 } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import useFetch from "@/hooks/use-fetch";
@@ -25,30 +28,28 @@ const AccountCard = ({ account }) => {
 
   const handleDefaultChange = async (event) => {
     event.preventDefault();
-  
+
     if (isDefault) {
       toast.warning("You need atleast 1 default account");
       return;
     }
-  
-    await updateDefaultFn(id); 
+
+    await updateDefaultFn(id);
   };
-  
+
   useEffect(() => {
     if (updatedAccount?.success) {
       toast.success("Default Account Updated Successfully");
     }
-  }, [updatedAccount]);
+  }, [updatedAccount, updateDefaultLoading]);
 
-useEffect(() => {
-  if( error ) {
+  useEffect(() => {
+    if (error) {
+      toast.error(error.message || "Failed to update Default Account");
+    }
+  }, [error]);
 
-    toast.error(error.message || "Failed to update Default Account")
-  }
-},[error])
-
-
- return (
+  return (
     <Card className="hover:shadow-md transition-shadow group relative bg-zinc-950 text-white">
       <Link href={`/account/${id}`}>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -70,11 +71,11 @@ useEffect(() => {
           </p>
         </CardContent>
         <CardFooter className="flex justify-between text-sm text-muted-foreground">
-          <div className="flex items-center">
+          <div className="pt-3 flex items-center text-gray-300">
             <ArrowUpRight className="mr-1 h-4 w-4 text-green-500" />
             Income
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center text-gray-300">
             <ArrowDownRight className="mr-1 h-4 w-4 text-red-500" />
             Expense
           </div>
@@ -82,7 +83,6 @@ useEffect(() => {
       </Link>
     </Card>
   );
-
 };
 
 export default AccountCard;
