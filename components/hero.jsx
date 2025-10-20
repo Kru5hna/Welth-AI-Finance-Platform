@@ -27,7 +27,8 @@ const HeroSection = () => {
   }, [imageRef])
 
   return (
-    <section className="pb-20 px-4">
+    <section className="pb-20 px-4 relative">
+      
       <div className="container mx-auto text-center">
         <h1 className="text-5xl md:text-7xl lg:text-8xl xl:text-[105px] gradient-title pb-6 leading-tight">
           Manage Your Finances <br />
@@ -48,12 +49,13 @@ const HeroSection = () => {
           </button>
         </Link>
 
-        <div className="hero-image-wrapper mt-16">
+        <div className="hero-image-wrapper mt-2">
+          
           <div ref={imageRef} className="hero-image group">
             <Image 
-              src="/banner.jpeg"
-              width={1100} 
-              height={450}
+              src="/banner.png"
+              width={1000} 
+              height={350}
               alt="Dashboard Preview - Financial Management Interface"
               className="rounded-lg shadow-2xl shadow-blue-500/20 border border-zinc-800 mx-auto hover:scale-[1.02] transition-all duration-500 hover:shadow-blue-500/30"
               priority

@@ -9,7 +9,7 @@ const Header = async () => {
   await checkUser()
 
   return (
-    <header className="fixed top-0 w-full backdrop-blur-lg border-b z-50">
+    <header className="fixed top-0 w-full backdrop-blur-lg border-b z-5 ">
       <nav className="container mx-auto flex items-center justify-between px-4 py-6 md:py-6">
         
         {/* Logo */}
