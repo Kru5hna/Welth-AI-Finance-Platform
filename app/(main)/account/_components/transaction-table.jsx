@@ -202,15 +202,12 @@ export function TransactionTable({ transactions }) {
     // 1. Outer Container: Dark Background
     <div className="space-y-4 rounded-xl border border-zinc-800 shadow-xl p-4 bg-zinc-900 text-white">
       {deleteLoading && (
-        // Use blue accent color for the loader
         <BarLoader className="mt-4" width={"100%"} color="#3b82f6" />
       )}
       {/* Filters */}
-      {/* Filter Container: Dark background/border */}
       <div className="flex flex-wrap gap-2 items-center justify-between p-4 rounded-xl border border-zinc-700 bg-zinc-800">
         <div className="relative flex-1">
           <Search className="absolute left-2 top-2.5 h-4 w-4 text-zinc-400" />
-          {/* Search Input: Dark styling */}
           <Input
             placeholder="Search transactions..."
             value={searchTerm}
@@ -222,7 +219,6 @@ export function TransactionTable({ transactions }) {
           />
         </div>
         <div className="flex gap-2">
-          {/* Selects: Dark styling */}
           <Select
             value={typeFilter}
             onValueChange={(value) => {
@@ -255,13 +251,11 @@ export function TransactionTable({ transactions }) {
             </SelectContent>
           </Select>
 
-          {/* Bulk Actions */}
           {selectedIds.length > 0 && (
             <div className="flex items-center gap-2">
               <Button
                 variant="destructive"
                 size="sm"
-                // Using red-600 for destructive actions
                 className="bg-red-600 hover:bg-red-700"
                 onClick={handleBulkDelete}
               >
@@ -277,7 +271,6 @@ export function TransactionTable({ transactions }) {
               size="icon"
               onClick={handleClearFilters}
               title="Clear filters"
-              // Clear filter button: Dark styling
               className="bg-zinc-700 border-zinc-600 text-white hover:bg-zinc-600"
             >
               <X className="h-4 w-5" />
@@ -474,7 +467,6 @@ export function TransactionTable({ transactions }) {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center mt-4 gap-2">
-          {/* Pagination Buttons: Dark styling */}
           <Button
             variant="outline"
             size="icon"
