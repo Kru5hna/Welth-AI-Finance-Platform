@@ -134,15 +134,12 @@ export function AccountChart({ transactions }) {
                 data={filteredData}
                 margin={{ top: 10, right: 30, left: 0, bottom: 5 }}
               >
-                {/* Recharts elements for dark theme */}
                 <CartesianGrid
                   stroke="#3f3f46"
                   strokeDasharray="3 3"
                   vertical={false}
                 />{" "}
-                {/* zinc-700 */}
                 <XAxis dataKey="date" fontSize={12} stroke="#a1a1aa" />{" "}
-                {/* zinc-400 */}
                 <YAxis
                   fontSize={12}
                   tickLine={false}
@@ -150,18 +147,23 @@ export function AccountChart({ transactions }) {
                   tickFormatter={(value) => `$${value}`}
                   stroke="#a1a1aa" // zinc-400
                 />
-                {/* Custom dark Tooltip (assuming you style Recharts Tooltip component globally or via custom component) */}
                 <Tooltip
-                  formatter={(value) => [`$${value}`, undefined]}
+                  formatter={(value, name) => {
+                    return [
+                      <span style={{ color: "#ffffff" }}>${value}</span>,
+                      name
+                    ];
+                  }}
                   contentStyle={{
                     backgroundColor: "#27272a",
                     border: "1px solid #3f3f46",
-                    color: "#fff",
-                  }} // zinc-800 / zinc-700
-                  itemStyle={{ color: "#fff" }}
+                    borderRadius: "6px",
+                    padding: "8px 12px",
+                  }}
+                  labelStyle={{ color: "#e4e4e7", marginBottom: "4px" }}
+                  itemStyle={{ padding: "2px 0" }}
                 />
                 <Legend wrapperStyle={{ color: "#fff" }} />{" "}
-                {/* Legend text color */}
                 <Bar
                   dataKey="income"
                   name="Income"
