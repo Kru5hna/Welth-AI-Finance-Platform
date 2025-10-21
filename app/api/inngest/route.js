@@ -9,6 +9,6 @@ export const { GET, POST, PUT } = serve({
    checkBudgetAlert,
    triggerRecurringTransactions,
    processRecurringTransaction,
-   generateMonthlyReoprts,
+   generateMonthlyReoprts, 
   ],
 });

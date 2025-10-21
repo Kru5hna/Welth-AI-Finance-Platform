@@ -61,10 +61,10 @@ const BudgetProgress = ({ initialBudget, currentExpenses }) => {
   };
 
   return (
-    <Card className="mb-9 bg-transparent text-white">
+    <Card className="mb-9 bg-zinc-900 text-white">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="flex-1">
-          <CardTitle>Monthly Budget (Default Account) </CardTitle>
+          <CardTitle className='text-xl' >Monthly Budget (Default Account) </CardTitle>
 
           <div className="flex items-center gap-2 mt-1">
             {isEditing ? (
@@ -132,7 +132,7 @@ const BudgetProgress = ({ initialBudget, currentExpenses }) => {
               }`}
             />
 
-            <p className="text-xs text-muted-foreground text-right">
+            <p className="text-md text-white text-right">
                {percentUsed.toFixed(1)} % used
             </p>
 
