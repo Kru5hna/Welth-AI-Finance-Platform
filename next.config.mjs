@@ -8,7 +8,7 @@ const nextConfig = {
          },
       ],
    },
-
+// next js has something limit when it comes to file sizes
    experimental: {
       serverActions: {
          bodySizeLimit: "5mb",

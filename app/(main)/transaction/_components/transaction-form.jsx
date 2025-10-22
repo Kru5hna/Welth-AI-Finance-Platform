@@ -86,7 +86,7 @@ export function AddTransactionForm({
   const onSubmit = async (data) => {
     const formData = {
       ...data,
-      amount: parseFloat(data.amount.toFixed(2)),
+      amount: parseFloat(data.amount).toFixed(2),
     };
     if (editMode) {
       transactionFn(editId, formData);
@@ -112,6 +112,7 @@ export function AddTransactionForm({
   );
 
   const handleScanComplete = (scannedData) => {
+    console.log(scannedData);
     if (scannedData) {
       setValue("amount", scannedData.amount.toString());
       setValue("date", new Date(scannedData.date));

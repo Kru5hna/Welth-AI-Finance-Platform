@@ -116,9 +116,9 @@ function calculateNextRecurringDate(startDate, interval) {
 
 export async function scanReceipt(file) {
   try {
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-    // Convert File to ArrayBuffer
+    // Convert File to ArrayBuffer to provide it to the model
     const arrayBuffer = await file.arrayBuffer();
 
     // convert arrayBuffer to base64
@@ -267,7 +267,7 @@ export async function updateTransaction(id, data) {
     revalidatePath("/dashboard");
     revalidatePath(`/account/${data.accountId}`);
 
-    return {success: true, data: serializeAmount(transaction)}
+    return { success: true, data: serializeAmount(transaction) };
   } catch (error) {
     throw new Error(error.message);
   }
