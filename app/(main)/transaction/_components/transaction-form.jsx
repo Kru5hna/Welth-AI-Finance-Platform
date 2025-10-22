@@ -86,7 +86,7 @@ export function AddTransactionForm({
   const onSubmit = async (data) => {
     const formData = {
       ...data,
-      amount: parseFloat(data.amount),
+      amount: parseFloat(data.amount.toFixed(2)),
     };
     if (editMode) {
       transactionFn(editId, formData);
@@ -147,11 +147,9 @@ export function AddTransactionForm({
           onValueChange={(value) => setValue("type", value)}
           defaultValue={type}
         >
-          {/* Custom class to integrate with black theme */}
           <SelectTrigger className="w-full bg-zinc-900 border border-zinc-700 text-white placeholder:text-zinc-500 focus:ring-1 transition-colors">
             <SelectValue placeholder="Select Type" />
           </SelectTrigger>
-          {/* Need to ensure SelectContent has dark styling from shadcn/ui configuration */}
           <SelectContent className="bg-zinc-900 border border-zinc-700 text-white">
             <SelectItem value="INCOME">Income</SelectItem>
             <SelectItem value="EXPENSE">Expense</SelectItem>
@@ -176,7 +174,6 @@ export function AddTransactionForm({
             {...register("amount")}
           />
 
-          {/* Corrected error check: should be errors.amount */}
           {errors.amount && (
             <p className="text-sm text-red-500">{errors.amount.message}</p>
           )}
@@ -246,7 +243,6 @@ export function AddTransactionForm({
 
         <Popover>
           <PopoverTrigger asChild>
-            {/* Custom styling for the date button to match the dark theme */}
             <Button
               variant="outline"
               className="w-full pl-3 justify-start font-normal bg-zinc-900 border border-zinc-700 text-white hover:bg-zinc-800 hover:text-white transition-colors"
@@ -256,7 +252,6 @@ export function AddTransactionForm({
               <CalendarIcon className="ml-auto h-4 w-4 text-zinc-400" />
             </Button>
           </PopoverTrigger>
-          {/* Ensure PopoverContent/Calendar also has dark styling */}
           <PopoverContent className="w-auto p-0 bg-zinc-900 border border-zinc-700" align="start">
             <Calendar
               mode="single"
@@ -294,7 +289,6 @@ export function AddTransactionForm({
           <label className="text-base font-medium text-white">
             Recurring Transaction
           </label>
-          {/* Use zinc-500 for muted text */}
           <div className="text-sm text-zinc-500">
             Set up a recurring schedule for this transaction
           </div>

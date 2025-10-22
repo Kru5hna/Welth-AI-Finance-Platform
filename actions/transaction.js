@@ -17,10 +17,9 @@ const serializeAmount = (obj) => ({
 export async function createTransaction(data) {
   try {
     const { userId } = await auth();
-    // console.log("hehehehe",userId);
 
     if (!userId) throw new Error("Unauthorized");
-
+    // Arcjet for rate limiting
     // Get request data for ArcJet
     const req = await request();
 
