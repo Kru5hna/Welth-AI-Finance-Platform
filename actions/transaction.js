@@ -60,7 +60,7 @@ export async function createTransaction(data) {
     if (!account) throw new Error(`Account not found: ${data.accountId}`);
 
     const balanceChange = data.type === "EXPENSE" ? -data.amount : data.amount;
-    const newBalance = account.balance.toNumber() + balanceChange;
+    const newBalance = parseFloat(account.balance) + parseFloat(balanceChange);
 
     const transaction = await db.$transaction(async (tx) => {
       const newTransaction = await tx.transaction.create({
@@ -80,7 +80,7 @@ export async function createTransaction(data) {
 
       await tx.account.update({
         where: { id: data.accountId },
-        data: { balance: newBalance },
+        data: { balance: parseFloat(newBalance.toFixed(2)) },
       });
 
       return newTransaction;
@@ -154,7 +154,7 @@ export async function scanReceipt(file) {
       prompt,
     ]);
 
-    const response = await result.response;
+    const response = result.response;
     const text = response.text();
     const cleanedText = text.replace(/```(?:json)?\n?/g, "").trim();
 
@@ -169,7 +169,7 @@ export async function scanReceipt(file) {
         merchantName: data.merchantName,
       };
     } catch (error) {
-      console.error("Error parsing JSON response: ", parseError);
+      console.error("Error parsing JSON response: ", error);
 
       throw new Error("Invalid response format from Gemini");
     }

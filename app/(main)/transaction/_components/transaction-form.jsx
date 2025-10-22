@@ -86,7 +86,7 @@ export function AddTransactionForm({
   const onSubmit = async (data) => {
     const formData = {
       ...data,
-      amount: parseFloat(data.amount).toFixed(2),
+      amount: parseFloat(parseFloat(data.amount).toFixed(2)),
     };
     if (editMode) {
       transactionFn(editId, formData);
