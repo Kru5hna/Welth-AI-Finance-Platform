@@ -36,7 +36,7 @@ const AccountsPage = async ({ params }) => {
 
         <div className="mt-4 md:mt-0 md:text-right">
           <div className="text-4xl font-bold tracking-tight text-white">
-            ${parseFloat(account.balance).toFixed(2)}
+            ₹{parseFloat(account.balance).toFixed(2)}
           </div>
           <p className="text-sm text-zinc-500 mt-1">
             {transactionCount} Transaction{transactionCount !== 1 ? 's' : ''}

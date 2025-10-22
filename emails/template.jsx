@@ -79,14 +79,14 @@ import {
                 <div style={styles.metricCard}>
                   <Text style={styles.metricLabel}>Total Income</Text>
                   <Text style={styles.metricValue}>
-                    ${Number(data?.stats.totalIncome).toFixed(2)}
+                    ₹{Number(data?.stats.totalIncome).toFixed(2)}
                   </Text>
                 </div>
                 
                 <div style={styles.metricCard}>
                   <Text style={styles.metricLabel}>Total Expenses</Text>
                   <Text style={styles.metricValue}>
-                    ${Number(data?.stats.totalExpenses).toFixed(2)}
+                    ₹{Number(data?.stats.totalExpenses).toFixed(2)}
                   </Text>
                 </div>
                 
@@ -96,7 +96,7 @@ import {
                     ...styles.metricValue,
                     color: (data.stats.totalIncome - data.stats.totalExpenses) >= 0 ? '#28a745' : '#dc3545'
                   }}>
-                    ${(data.stats.totalIncome - data.stats.totalExpenses).toFixed(2)}
+                    ₹{(data.stats.totalIncome - data.stats.totalExpenses).toFixed(2)}
                   </Text>
                 </div>
               </Section>
@@ -109,7 +109,7 @@ import {
                     {Object.entries(data.stats.byCategory).map(([category, amount]) => (
                       <div key={category} style={styles.tableRow}>
                         <Text style={styles.tableCell}>{category}</Text>
-                        <Text style={styles.tableCell}>${Number(amount).toFixed(2)}</Text>
+                        <Text style={styles.tableCell}>₹{Number(amount).toFixed(2)}</Text>
                       </div>
                     ))}
                   </div>
@@ -162,16 +162,16 @@ import {
               <Section style={styles.statsContainer}>
                 <div style={styles.stat}>
                   <Text style={styles.text}>Budget Amount</Text>
-                  <Text style={styles.heading}>${data?.budgetAmount}</Text>
+                  <Text style={styles.heading}>₹{data?.budgetAmount}</Text>
                 </div>
                 <div style={styles.stat}>
                   <Text style={styles.text}>Spent So Far</Text>
-                  <Text style={styles.heading}>${data?.totalExpenses}</Text>
+                  <Text style={styles.heading}>₹{data?.totalExpenses}</Text>
                 </div>
                 <div style={styles.stat}>
                   <Text style={styles.text}>Remaining</Text>
                   <Text style={styles.heading}>
-                    ${data?.budgetAmount - data?.totalExpenses}
+                    ₹{data?.budgetAmount - data?.totalExpenses}
                   </Text>
                 </div>
               </Section>

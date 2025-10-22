@@ -127,7 +127,6 @@ export function AddTransactionForm({
   };
 
   return (
-    // The main form container, assuming the page background is black
     <form className="space-y-6 text-white" onSubmit={handleSubmit(onSubmit)}>
       
       {!editMode && (
@@ -195,7 +194,7 @@ export function AddTransactionForm({
             <SelectContent className="bg-zinc-900 border border-zinc-700 text-white">
               {accounts.map((account) => (
                 <SelectItem key={account.id} value={account.id}>
-                  {account.name} (${parseFloat(account.balance).toFixed(2)})
+                  {account.name} (₹{parseFloat(account.balance).toFixed(2)})
                 </SelectItem>
               ))}
 
@@ -355,7 +354,6 @@ export function AddTransactionForm({
         </Button>
         <Button
           type="button"
-          // Secondary button: subtle outline
           variant="outline"
           className="w-full sm:w-1/2 border-zinc-700 bg-transparent text-white hover:border-zinc-700 transition-colors hover:scale-95 duration-200 hover:bg-transparent hover:text-white"
           onClick={() => router.back()}

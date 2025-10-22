@@ -102,27 +102,27 @@ export function AccountChart({ transactions }) {
             <div className="bg-green-950/30 border border-green-700/50 p-4 rounded-lg shadow-sm">
               <p className="text-sm text-zinc-400">Total Income</p>
               <p className="text-xl font-bold text-green-400">
-                ${totals.income.toFixed(2)}
+                ₹{totals.income.toFixed(2)}
               </p>
             </div>
             {/* Expense Card: Darker red background */}
             <div className="bg-red-950/30 border border-red-700/50 p-4 rounded-lg shadow-sm">
               <p className="text-sm text-zinc-400">Total Expenses</p>
               <p className="text-xl font-bold text-red-400">
-                ${totals.expense.toFixed(2)}
+                ₹{totals.expense.toFixed(2)}
               </p>
             </div>
             {/* Net Card: Darker blue background */}
             <div className="bg-blue-950/30 border border-blue-700/50 p-4 rounded-lg shadow-sm">
               <p className="text-sm text-zinc-400">Net</p>
               <p
-                className={`text-xl font-bold ${
+                className={`text-xl font-bold ₹{
                   totals.income - totals.expense >= 0
                     ? "text-green-400"
                     : "text-red-400"
                 }`}
               >
-                ${(totals.income - totals.expense).toFixed(2)}
+                ₹{(totals.income - totals.expense).toFixed(2)}
               </p>
             </div>
           </div>
@@ -144,13 +144,13 @@ export function AccountChart({ transactions }) {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
-                  tickFormatter={(value) => `$${value}`}
+                  tickFormatter={(value) => `₹${value}`}
                   stroke="#a1a1aa" // zinc-400
                 />
                 <Tooltip
                   formatter={(value, name) => {
                     return [
-                      <span style={{ color: "#ffffff" }}>${value}</span>,
+                      <span style={{ color: "#ffffff" }}>₹{value}</span>,
                       name
                     ];
                   }}
