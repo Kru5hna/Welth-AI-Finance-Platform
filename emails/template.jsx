@@ -136,9 +136,7 @@ import {
                 <Text style={styles.footerText}>
                   Thank you for using Welth. Keep tracking your finances for better financial health!
                 </Text>
-                <Text style={styles.footerNote}>
-                  Need help or have questions? Reply to this email.
-                </Text>
+                
               </Section>
             </Container>
           </Body>
