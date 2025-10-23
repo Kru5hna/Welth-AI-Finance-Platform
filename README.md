@@ -2,7 +2,6 @@
 
 <div align="center">
 
-<img width="1470" alt="Screenshot 2024-12-10 at 9 45 45 AM" src="https://raw.githubusercontent.com/Kru5hna/Welth-AI-Finance-Platform/master/public/github.png">
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
 ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-green?style=for-the-badge&logo=supabase)
