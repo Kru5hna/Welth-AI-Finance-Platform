@@ -1,7 +1,7 @@
 # 💰 Welth - AI-Powered Finance Platform
 
 <div align="center">
-<img width="1470" alt="Screenshot 2024-12-10 at 9 45 45 AM" src="https://raw.githubusercontent.com/Kru5hna/Welth-AI-Finance-Platform/master/public/github.png">
+<img width="1470" alt="Screenshot 2024-12-10 at 9 45 45 AM" src="https://raw.githubusercontent.com/Kru5hna/Welth-AI-Finance-Platform/master/public/readme.png">
 
 
 ![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)
